@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="robots" content="noindex">
+<title>Đánh giá mức độ rối loạn cương dương (IIEF-15)</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --nen:#0a0a0a; --the:#151515; --the-2:#1d1d1d;
+  --vien:rgba(255,255,255,.10); --vien-manh:rgba(255,255,255,.22);
+  --chu:#f5f5f5; --chu-2:#b4b4b8; --chu-mo:#8a8a90;
+  --vang:#FBBF24; --vang-2:#D4A843;
+  --tot:#0ca30c; --canh:#fab219; --nang-vua:#ec835a; --nang:#d03b3b;
+  --r:14px;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--nen); color:var(--chu);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",system-ui,sans-serif;
+  font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+.boc{
+  max-width:520px; margin:0 auto; min-height:100vh; min-height:100dvh;
+  display:flex; flex-direction:column;
+  padding:0 18px calc(28px + env(safe-area-inset-bottom));
+}
+.man{display:none; flex:1; flex-direction:column; animation:hien .22s ease}
+.man.mo{display:flex}
+@keyframes hien{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.man{animation:none}}
+
+/* MÀN MỞ ĐẦU */
+.dau{text-align:center; padding-top:calc(34px + env(safe-area-inset-top))}
+.anh{width:88px;height:88px;border-radius:50%;object-fit:cover;border:2px solid var(--vang-2);display:block;margin:0 auto 16px}
+.hieu{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:var(--vang-2);font-weight:700}
+h1{font-size:26px;line-height:1.3;font-weight:800;margin:12px 0 12px;letter-spacing:-.3px}
+.dan{color:var(--chu-2);font-size:16px;margin-bottom:22px}
+.the-nguon{
+  background:var(--the); border:1px solid var(--vien); border-radius:var(--r);
+  padding:16px 18px; text-align:left; margin-bottom:20px;
+}
+.the-nguon p{font-size:14.5px;color:var(--chu-2);margin-bottom:9px}
+.the-nguon p:last-child{margin-bottom:0}
+.the-nguon b{color:var(--chu);font-weight:650}
+.moc{display:flex;gap:9px;align-items:flex-start;font-size:14.5px;color:var(--chu-2);margin-bottom:11px;text-align:left}
+.moc .so{flex:0 0 22px;height:22px;border-radius:50%;background:rgba(251,191,36,.14);color:var(--vang);font-size:12px;font-weight:800;display:grid;place-items:center;margin-top:1px}
+.rieng{font-size:13.5px;color:var(--chu-mo);text-align:center;margin-top:16px;line-height:1.5}
+
+/* NÚT */
+.nut{
+  display:block;width:100%;min-height:56px;border:0;border-radius:var(--r);
+  background:var(--vang); color:#1a1200; font-weight:800; font-size:17.5px;
+  font-family:inherit; cursor:pointer; padding:15px 18px; text-align:center;
+  -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+}
+.nut:active{transform:scale(.985)}
+.nut.phu{background:transparent;color:var(--chu-2);border:1px solid var(--vien-manh);font-weight:600}
+.nut[disabled]{opacity:.4;cursor:not-allowed}
+
+/* ĐẦU MÀN CÂU HỎI */
+.thanh-dau{padding-top:calc(14px + env(safe-area-inset-top));padding-bottom:14px;position:sticky;top:0;background:var(--nen);z-index:5}
+.hang-dau{display:flex;align-items:center;gap:12px;margin-bottom:11px;min-height:48px}
+.lui{
+  flex:0 0 auto;width:48px;height:48px;border-radius:50%;border:1px solid var(--vien-manh);
+  background:transparent;color:var(--chu);font-size:22px;line-height:1;cursor:pointer;
+  display:grid;place-items:center;font-family:inherit;-webkit-tap-highlight-color:transparent;
+}
+.lui:active{background:var(--the-2)}
+.dem{font-size:14px;color:var(--chu-mo);font-weight:600;font-variant-numeric:tabular-nums}
+.phan{margin-left:auto;font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--vang-2);font-weight:700}
+.rai{height:4px;background:rgba(255,255,255,.09);border-radius:2px;overflow:hidden}
+.rai>i{display:block;height:100%;background:var(--vang);border-radius:0 2px 2px 0;transition:width .3s ease;width:0}
+
+/* CÂU HỎI */
+.than{flex:1;padding-top:6px}
+.hoi{font-size:21px;line-height:1.4;font-weight:700;margin-bottom:7px;letter-spacing:-.2px}
+.hoi b{color:var(--vang)}
+.gohoi{font-size:14.5px;color:var(--chu-mo);margin-bottom:18px;line-height:1.5}
+.ds{display:flex;flex-direction:column;gap:10px;padding-bottom:8px}
+.da{
+  display:flex;align-items:center;gap:13px;width:100%;min-height:58px;
+  background:var(--the);border:1px solid var(--vien);border-radius:var(--r);
+  padding:13px 15px;color:var(--chu);font-size:16.5px;line-height:1.4;
+  text-align:left;font-family:inherit;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.da:active{border-color:var(--vien-manh)}
+.da .o{flex:0 0 22px;height:22px;border-radius:50%;border:2px solid var(--vien-manh);display:grid;place-items:center;transition:.15s}
+.da.vuong .o{border-radius:6px}
+.da .o::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--vang);transform:scale(0);transition:transform .15s}
+.da.vuong .o::after{border-radius:2px}
+.da.chon{border-color:var(--vang);background:rgba(251,191,36,.09)}
+.da.chon .o{border-color:var(--vang)}
+.da.chon .o::after{transform:scale(1)}
+.o-khac{width:100%;min-height:52px;background:var(--the);border:1px solid var(--vien);border-radius:var(--r);padding:12px 15px;color:var(--chu);font-size:16px;font-family:inherit;margin-top:10px}
+.o-khac:focus{outline:none;border-color:var(--vang)}
+.o-khac::placeholder{color:var(--chu-mo)}
+.tiep-boc{padding:14px 0 4px}
+
+/* FORM */
+.o-nhap{width:100%;min-height:56px;background:var(--the);border:1px solid var(--vien);border-radius:var(--r);padding:15px 16px;color:var(--chu);font-size:17px;font-family:inherit;margin-bottom:4px}
+.o-nhap:focus{outline:none;border-color:var(--vang)}
+.o-nhap::placeholder{color:var(--chu-mo)}
+.nhan{display:block;font-size:14.5px;color:var(--chu-2);margin:16px 0 7px;font-weight:600}
+.loi{color:#ff9a9a;font-size:13.5px;min-height:19px;margin-bottom:2px}
+.rieng-tu{display:flex;gap:10px;background:var(--the);border:1px solid var(--vien);border-radius:var(--r);padding:13px 15px;margin:16px 0 14px;font-size:14px;color:var(--chu-2);line-height:1.5}
+.dong-y{display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-size:14px;color:var(--chu-2);line-height:1.5;-webkit-tap-highlight-color:transparent}
+.dong-y input{flex:0 0 auto;width:24px;height:24px;margin-top:1px;accent-color:var(--vang);cursor:pointer}
+
+/* KẾT QUẢ */
+.kq-dau{text-align:center;padding:26px 0 8px}
+.kq-nhan{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--chu-mo);font-weight:700}
+.kq-so{font-size:60px;font-weight:800;line-height:1.05;margin:8px 0 2px;letter-spacing:-2px}
+.kq-tren{font-size:16px;color:var(--chu-mo);font-weight:600}
+.kq-muc{display:inline-flex;align-items:center;gap:9px;margin-top:15px;padding:9px 17px;border-radius:999px;font-weight:750;font-size:16.5px;border:1px solid}
+.kq-muc .cham{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+h2{font-size:19px;font-weight:750;margin:30px 0 13px;letter-spacing:-.2px}
+.the{background:var(--the);border:1px solid var(--vien);border-radius:var(--r);padding:17px 18px;margin-bottom:12px}
+.the h3{font-size:16.5px;font-weight:750;margin-bottom:7px;line-height:1.38}
+.the p{font-size:15px;color:var(--chu-2);line-height:1.62}
+.the p + p{margin-top:9px}
+.the .nguon{font-size:12.5px;color:var(--chu-mo);margin-top:10px;line-height:1.5}
+.chi-so{margin-bottom:15px}
+.cs-hang{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px}
+.cs-ten{font-size:15px;color:var(--chu);font-weight:600}
+.cs-diem{font-size:14px;color:var(--chu-2);font-variant-numeric:tabular-nums;font-weight:650;flex:0 0 auto}
+.cs-ray{height:10px;border-radius:0 4px 4px 0;overflow:hidden}
+.cs-ray>i{display:block;height:100%;border-radius:0 4px 4px 0;transition:width .5s ease}
+.co-do{border-color:rgba(208,59,59,.42);background:rgba(208,59,59,.08)}
+.co-do h3{color:#ff9d9d}
+.co-do ul{margin:8px 0 0 19px}
+.co-do li{font-size:15px;color:var(--chu-2);line-height:1.6;margin-bottom:6px}
+.cta{background:linear-gradient(160deg,rgba(251,191,36,.14),rgba(212,168,67,.05));border:1px solid rgba(251,191,36,.34);border-radius:var(--r);padding:20px 18px;margin:24px 0 12px;text-align:center}
+.cta h3{font-size:19px;font-weight:800;margin-bottom:8px;line-height:1.35}
+.cta p{font-size:15px;color:var(--chu-2);margin-bottom:16px;line-height:1.6}
+.chan{font-size:12.5px;color:var(--chu-mo);text-align:center;line-height:1.65;margin-top:24px;padding-top:18px;border-top:1px solid var(--vien)}
+.nguon-ds{font-size:12.5px;color:var(--chu-mo);line-height:1.7}
+.nguon-ds li{margin-bottom:5px;margin-left:16px}
+details{margin-top:14px}
+summary{font-size:14px;color:var(--chu-2);cursor:pointer;padding:9px 0;font-weight:600;-webkit-tap-highlight-color:transparent}
+</style>
+</head>
+<body>
+<div class="boc">
+
+<!-- MÀN MỞ ĐẦU -->
+<section class="man mo" id="m-dau">
+  <div class="dau">
+    <img class="anh" src="data:image/jpeg;base64,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" alt="Chị Mai, Giữ Lửa">
+    <div class="hieu">Giữ Lửa</div>
+    <h1>Đánh giá mức độ rối loạn cương dương</h1>
+    <p class="dan">Theo thang điểm quốc tế IIEF-15, kết hợp phần đánh giá nguyên nhân của chuyên gia.</p>
+  </div>
+
+  <div class="the-nguon">
+    <p><b>IIEF-15</b> là thang đo chức năng cương dương quốc tế, được dùng trong bệnh viện và trong các thử nghiệm lâm sàng trên toàn thế giới.</p>
+    <p>Bài gồm <b>26 câu</b>: 15 câu của thang IIEF-15 và 11 câu đánh giá nguyên nhân. Làm hết khoảng 3 phút.</p>
+    <p>Kết quả <b>chấm bằng điểm số</b> theo ngưỡng đã công bố trên tạp chí y khoa <i>Urology</i>, không phải phỏng đoán.</p>
+  </div>
+
+  <div class="moc"><span class="so">1</span><span>Trả lời thật lòng. Càng đúng thì kết quả và lộ trình càng sát với anh.</span></div>
+  <div class="moc"><span class="so">2</span><span>Nhận điểm số trên 5 nhóm chỉ số, kèm nhận định riêng theo hồ sơ của anh.</span></div>
+  <div class="moc"><span class="so">3</span><span>Nhận lộ trình cải thiện miễn phí, soạn theo đúng tình trạng anh đang gặp.</span></div>
+
+  <div class="tiep-boc" style="margin-top:22px">
+    <button class="nut" id="b-batdau">Bắt đầu đánh giá</button>
+    <p class="rieng">Bài đánh giá này giúp anh hiểu tình trạng của mình.<br>Nó không thay thế việc khám và chẩn đoán của bác sĩ.</p>
+  </div>
+</section>
+
+<!-- MÀN CÂU HỎI -->
+<section class="man" id="m-hoi">
+  <div class="thanh-dau">
+    <div class="hang-dau">
+      <button class="lui" id="b-lui" aria-label="Quay lại câu trước">←</button>
+      <span class="dem" id="t-dem">Câu 1/26</span>
+      <span class="phan" id="t-phan"></span>
+    </div>
+    <div class="rai"><i id="t-rai"></i></div>
+  </div>
+  <div class="than">
+    <h2 class="hoi" id="t-hoi" style="margin:0 0 7px"></h2>
+    <p class="gohoi" id="t-gohoi"></p>
+    <div class="ds" id="t-ds"></div>
+    <div id="t-khac-boc" style="display:none"><input class="o-khac" id="t-khac" type="text" placeholder="Khác (nếu có, ghi rõ)"></div>
+  </div>
+  <div class="tiep-boc" id="t-tiepboc" style="display:none">
+    <button class="nut" id="b-tiep">Tiếp tục</button>
+  </div>
+</section>
+
+<!-- MÀN NHẬP THÔNG TIN -->
+<section class="man" id="m-lead">
+  <div class="thanh-dau">
+    <div class="hang-dau">
+      <button class="lui" id="b-lui2" aria-label="Quay lại câu trước">←</button>
+      <span class="dem">Bước cuối</span>
+    </div>
+    <div class="rai"><i style="width:100%"></i></div>
+  </div>
+  <div class="than">
+    <h2 class="hoi" style="margin:14px 0 7px">Kết quả của anh đã sẵn sàng</h2>
+    <p class="gohoi">Anh để lại tên và số Zalo để đội ngũ Giữ Lửa gửi lộ trình cải thiện, soạn theo đúng tình trạng của anh.</p>
+
+    <label class="nhan" for="i-ten">Tên của anh</label>
+    <input class="o-nhap" id="i-ten" type="text" autocomplete="name" placeholder="Ví dụ: Anh Tuấn" enterkeyhint="next">
+    <div class="loi" id="e-ten"></div>
+
+    <label class="nhan" for="i-sdt">Số Zalo</label>
+    <input class="o-nhap" id="i-sdt" type="tel" inputmode="numeric" autocomplete="tel" placeholder="Ví dụ: 0912345678" enterkeyhint="done">
+    <div class="loi" id="e-sdt"></div>
+
+    <div class="rieng-tu">
+      <span>🔒</span>
+      <span>Số của anh chỉ dùng để gửi lộ trình và tư vấn. Không quảng cáo làm phiền, không đưa cho bên thứ ba.</span>
+    </div>
+
+    <label class="dong-y" for="i-dongy">
+      <input type="checkbox" id="i-dongy">
+      <span>Tôi đồng ý để đội ngũ Giữ Lửa dùng thông tin và câu trả lời của tôi nhằm soạn kết quả, lộ trình và liên hệ tư vấn.</span>
+    </label>
+    <div class="loi" id="e-dongy"></div>
+  </div>
+  <div class="tiep-boc">
+    <button class="nut" id="b-xem">Xem kết quả của tôi</button>
+  </div>
+</section>
+
+<!-- MÀN KẾT QUẢ -->
+<section class="man" id="m-kq">
+  <div id="kq-noidung"></div>
+</section>
+
+</div>
+
+<script>
+/* ĐƯỜNG NỐI SỐ ĐIỆN THOẠI. Dán link Google Apps Script hoặc API nhận lead vào
+   giữa 2 dấu nháy dưới đây thì số khách tự chảy về. Để trống thì trang vẫn chạy,
+   số được giữ tạm trong trình duyệt của khách. */
+var DUONG_NOI_LEAD = '';
+var SO_ZALO = '0934368434';
+
+/* ===== BỘ CÂU HỎI ===== */
+var TS6 = [
+  ['Không có hoạt động tình dục', 0],
+  ['Hầu như không có lần nào', 1],
+  ['Vài lần (ít hơn nửa số lần)', 2],
+  ['Khoảng nửa số lần', 3],
+  ['Phần lớn các lần (hơn nửa số lần)', 4],
+  ['Gần như luôn luôn', 5]
+];
+var TS6b = [
+  ['Không quan hệ lần nào', 0],
+  ['Hầu như không có lần nào', 1],
+  ['Vài lần (ít hơn nửa số lần)', 2],
+  ['Khoảng nửa số lần', 3],
+  ['Phần lớn các lần (hơn nửa số lần)', 4],
+  ['Gần như luôn luôn', 5]
+];
+var TS6c = [
+  ['Không có kích thích hay quan hệ', 0],
+  ['Hầu như không có lần nào', 1],
+  ['Vài lần (ít hơn nửa số lần)', 2],
+  ['Khoảng nửa số lần', 3],
+  ['Phần lớn các lần (hơn nửa số lần)', 4],
+  ['Gần như luôn luôn', 5]
+];
+var TS5 = [
+  ['Hầu như không có lần nào', 1],
+  ['Vài lần (ít hơn nửa số lần)', 2],
+  ['Khoảng nửa số lần', 3],
+  ['Phần lớn các lần (hơn nửa số lần)', 4],
+  ['Gần như luôn luôn', 5]
+];
+var HL5 = [
+  ['Rất không hài lòng', 1],
+  ['Khá không hài lòng', 2],
+  ['Nửa hài lòng nửa không', 3],
+  ['Khá hài lòng', 4],
+  ['Rất hài lòng', 5]
+];
+var MUC5 = [
+  ['Rất thấp, gần như không có', 1],
+  ['Thấp', 2],
+  ['Trung bình', 3],
+  ['Cao', 4],
+  ['Rất cao', 5]
+];
+function da(bo){ return bo.map(function(x){ return {t:x[0], d:x[1]}; }); }
+
+var CAU = [
+  {id:'tuoi', phan:'Thông tin', kieu:'don',
+   hoi:'Anh đang ở độ tuổi nào?',
+   ds:[{t:'34 tuổi trở xuống', v:'tre'},{t:'35 tuổi trở lên', v:'gia'}]},
+
+  {id:'q1', phan:'IIEF-15', mien:'EF', kieu:'don',
+   hoi:'Bao nhiêu lần anh <b>cương lên được</b> khi có hoạt động tình dục?',
+   go:'Tính trong 4 tuần gần đây.', ds:da(TS6)},
+  {id:'q2', phan:'IIEF-15', mien:'EF', kieu:'don',
+   hoi:'Khi đã cương, bao nhiêu lần dương vật <b>đủ cứng để đưa vào</b>?',
+   go:'Tính trong 4 tuần gần đây.', ds:da(TS6)},
+  {id:'q3', phan:'IIEF-15', mien:'IS', kieu:'don',
+   hoi:'Khi quan hệ, bao nhiêu lần anh <b>đưa vào được</b>?',
+   go:'Câu này hỏi việc thâm nhập lúc bắt đầu, chưa tính về sau.', ds:da(TS6b)},
+  {id:'q4', phan:'IIEF-15', mien:'EF', kieu:'don',
+   hoi:'Sau khi đã đưa vào, bao nhiêu lần anh <b>giữ được, không bị xìu</b> cho tới lúc xong?',
+   go:'Câu này hỏi việc duy trì sau khi đã vào, khác với câu trước.', ds:da(TS6b)},
+  {id:'q5', phan:'IIEF-15', mien:'EF', kieu:'don',
+   hoi:'Anh thấy <b>khó tới mức nào</b> để giữ cương cho tới lúc quan hệ xong?',
+   go:'Tính trong 4 tuần gần đây.',
+   ds:da([['Không quan hệ lần nào',0],['Cực kỳ khó',1],['Rất khó',2],['Khó',3],['Hơi khó',4],['Không khó',5]])},
+  {id:'q6', phan:'IIEF-15', mien:'IS', kieu:'don',
+   hoi:'Trong 4 tuần qua, anh <b>quan hệ mấy lần</b>?',
+   ds:da([['Không lần nào',0],['1 đến 2 lần',1],['3 đến 4 lần',2],['5 đến 6 lần',3],['7 đến 10 lần',4],['Từ 11 lần trở lên',5]])},
+  {id:'q7', phan:'IIEF-15', mien:'IS', kieu:'don',
+   hoi:'Khi quan hệ, bao nhiêu lần anh <b>thấy thỏa mãn</b>?',
+   go:'Tính trong 4 tuần gần đây.', ds:da(TS6b)},
+  {id:'q8', phan:'IIEF-15', mien:'IS', kieu:'don',
+   hoi:'Anh thấy việc quan hệ <b>thú vị đến mức nào</b>?',
+   ds:da([['Không quan hệ lần nào',0],['Không thú vị chút nào',1],['Không thú vị lắm',2],['Khá thú vị',3],['Thú vị',4],['Rất thú vị',5]])},
+  {id:'q9', phan:'IIEF-15', mien:'OF', kieu:'don',
+   hoi:'Khi có kích thích hoặc quan hệ, bao nhiêu lần anh <b>xuất tinh được</b>?',
+   go:'Tính trong 4 tuần gần đây.', ds:da(TS6c)},
+  {id:'q10', phan:'IIEF-15', mien:'OF', kieu:'don',
+   hoi:'Khi có kích thích hoặc quan hệ, bao nhiêu lần anh <b>lên đỉnh (cực khoái)</b>?',
+   go:'Cực khoái là cảm giác lên đỉnh, có thể có hoặc không kèm xuất tinh.', ds:da(TS6c)},
+  {id:'q11', phan:'IIEF-15', mien:'SD', kieu:'don',
+   hoi:'Trong 4 tuần qua, bao nhiêu lần anh <b>thấy có ham muốn</b>?',
+   ds:da(TS5)},
+  {id:'q12', phan:'IIEF-15', mien:'SD', kieu:'don',
+   hoi:'Anh tự đánh giá <b>mức ham muốn</b> của mình thế nào?',
+   ds:da(MUC5)},
+  {id:'q13', phan:'IIEF-15', mien:'OS', kieu:'don',
+   hoi:'Anh <b>hài lòng đến mức nào với đời sống tình dục</b> của mình nói chung?',
+   ds:da(HL5)},
+  {id:'q14', phan:'IIEF-15', mien:'OS', kieu:'don',
+   hoi:'Anh <b>hài lòng đến mức nào với quan hệ</b> giữa anh và vợ hoặc bạn tình?',
+   ds:da(HL5)},
+  {id:'q15', phan:'IIEF-15', mien:'EF', kieu:'don',
+   hoi:'Anh <b>tự tin đến mức nào</b> rằng mình cương và giữ được cương?',
+   ds:da([['Rất thấp',1],['Thấp',2],['Trung bình',3],['Cao',4],['Rất cao',5]])},
+
+  {id:'sang', phan:'Yếu tố liên quan', kieu:'don',
+   hoi:'Buổi sáng ngủ dậy, anh còn cương tự nhiên không?',
+   go:'Đây là dấu hiệu quan trọng để phân biệt nguyên nhân.',
+   ds:[{t:'Vẫn còn đều, gần như mỗi sáng',v:'deu'},{t:'Thỉnh thoảng mới có',v:'thinh'},{t:'Rất hiếm khi',v:'hiem'},{t:'Không còn nữa',v:'khong'}]},
+  {id:'batdau', phan:'Yếu tố liên quan', kieu:'don',
+   hoi:'Tình trạng của anh bắt đầu như thế nào?',
+   ds:[{t:'Đột ngột, chỉ trong vài tuần',v:'dotngot'},{t:'Giảm dần qua nhiều tháng, nhiều năm',v:'giamdan'},{t:'Chỉ xảy ra trong một số hoàn cảnh, lúc khác vẫn bình thường',v:'hoancanh'},{t:'Tôi không để ý rõ',v:'khongro'}]},
+  {id:'baolau', phan:'Yếu tố liên quan', kieu:'don',
+   hoi:'Tình trạng này kéo dài bao lâu rồi?',
+   ds:[{t:'Dưới 3 tháng',v:'d3t'},{t:'Từ 3 đến 12 tháng',v:'3_12'},{t:'Từ 1 đến 3 năm',v:'1_3n'},{t:'Trên 3 năm',v:'tren3n'}]},
+  {id:'benh', phan:'Yếu tố liên quan', kieu:'nhieu', khac:true,
+   hoi:'Anh đang có bệnh nào trong số này?',
+   go:'Chọn tất cả những mục đúng với anh.',
+   ds:[{t:'Tiểu đường hoặc đường huyết cao',v:'tieuduong'},{t:'Huyết áp cao',v:'huyetap'},{t:'Mỡ máu cao',v:'momau'},{t:'Bệnh tim mạch',v:'tim'},{t:'Vòng bụng từ 90cm trở lên',v:'bung'},{t:'Không có mục nào',v:'khong',rieng:true}]},
+  {id:'thuoc', phan:'Yếu tố liên quan', kieu:'nhieu', khac:true,
+   hoi:'Anh đang dùng đều đặn loại thuốc nào trong số này?',
+   go:'Chọn tất cả những mục đúng với anh.',
+   ds:[{t:'Thuốc hạ huyết áp',v:'hahuyetap'},{t:'Thuốc chống trầm cảm, thuốc ngủ hoặc an thần',v:'tramcam'},{t:'Thuốc điều trị tuyến tiền liệt',v:'tienliet'},{t:'Không dùng thuốc gì đều đặn',v:'khong',rieng:true}]},
+  {id:'dadung', phan:'Yếu tố liên quan', kieu:'don',
+   hoi:'Trước đây anh đã dùng thuốc hay sản phẩm nào cho tình trạng này chưa? Kết quả thế nào?',
+   ds:[{t:'Chưa dùng gì',v:'chua'},{t:'Có dùng, lúc uống thì được, ngưng lại trở về như cũ',v:'bilai'},{t:'Có dùng, giờ gần như phải có thuốc mới quan hệ được',v:'phuthuoc'},{t:'Có dùng nhưng không thấy cải thiện',v:'khongdo'}]},
+  {id:'thoiquen', phan:'Yếu tố liên quan', kieu:'nhieu', khac:true,
+   hoi:'Trong sinh hoạt hằng ngày, anh có những điều nào sau đây?',
+   go:'Chọn tất cả những mục đúng với anh.',
+   ds:[{t:'Hút thuốc lá',v:'thuocla'},{t:'Uống rượu bia thường xuyên',v:'ruou'},{t:'Ngủ dưới 6 tiếng mỗi đêm',v:'thieungu'},{t:'Hầu như không vận động, tập luyện',v:'itvandong'},{t:'Ngồi liên tục trên 6 tiếng mỗi ngày',v:'ngoinhieu'},{t:'Không có mục nào',v:'khong',rieng:true}]},
+  {id:'noitiet', phan:'Yếu tố liên quan', kieu:'nhieu', khac:true,
+   hoi:'Gần đây anh có những dấu hiệu nào sau đây?',
+   go:'Chọn tất cả những mục đúng với anh.',
+   ds:[{t:'Mệt mỏi, thiếu sức mà không rõ lý do',v:'metmoi'},{t:'Mỡ bụng tăng, cơ tay chân giảm',v:'moco'},{t:'Dễ cáu gắt, mất động lực làm việc',v:'caugat'},{t:'Ham muốn giảm rõ so với vài năm trước',v:'giamham'},{t:'Ngủ không sâu, hay tỉnh giữa đêm',v:'ngukem'},{t:'Không có mục nào',v:'khong',rieng:true}]},
+  {id:'than', phan:'Yếu tố liên quan', kieu:'nhieu', khac:true,
+   hoi:'Anh có gặp tình trạng nào sau đây không?',
+   go:'Chọn tất cả những mục đúng với anh.',
+   ds:[{t:'Tiểu đêm từ 2 lần trở lên',v:'tieudem'},{t:'Đau lưng, mỏi đầu gối',v:'daulung'},{t:'Tiểu khó, tia nước yếu hoặc tiểu không hết',v:'tieukho'},{t:'Không có mục nào',v:'khong',rieng:true}]},
+  {id:'xuattinh', phan:'Yếu tố liên quan', kieu:'don',
+   hoi:'Thường từ khi bắt đầu vào đến khi xuất tinh, anh được khoảng bao lâu?',
+   ds:[{t:'Dưới 1 phút',v:'d1p'},{t:'Khoảng 1 đến 3 phút',v:'1_3p'},{t:'Khoảng 3 đến 5 phút',v:'3_5p'},{t:'Trên 5 phút',v:'tren5p'},{t:'Tôi không rõ hoặc không quan hệ',v:'khongro'}]}
+];
+
+/* ===== TRẠNG THÁI ===== */
+var traLoi = {};
+var viTri = 0;
+var dangChuyen = false;
+function E(id){ return document.getElementById(id); }
+
+function moMan(id){
+  var ds = document.querySelectorAll('.man');
+  for (var i=0;i<ds.length;i++) ds[i].classList.remove('mo');
+  E(id).classList.add('mo');
+  window.scrollTo(0,0);
+}
+
+/* ===== VẼ CÂU HỎI ===== */
+function veCau(){
+  var c = CAU[viTri];
+  E('t-dem').textContent  = 'Câu ' + (viTri+1) + '/' + CAU.length;
+  E('t-phan').textContent = c.phan;
+  E('t-rai').style.width  = (viTri / CAU.length * 100) + '%';
+  E('t-hoi').innerHTML    = c.hoi;
+  E('t-gohoi').textContent = c.go || '';
+  E('t-gohoi').style.display = c.go ? 'block' : 'none';
+
+  var boc = E('t-ds');
+  boc.innerHTML = '';
+  var daCo = traLoi[c.id];
+
+  c.ds.forEach(function(o, k){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'da' + (c.kieu === 'nhieu' ? ' vuong' : '');
+    b.innerHTML = '<span class="o"></span><span>' + o.t + '</span>';
+    var maO = (o.v !== undefined) ? o.v : k;
+    var chon = false;
+    if (daCo) {
+      if (c.kieu === 'nhieu') chon = (daCo.vs || []).indexOf(maO) > -1;
+      else chon = (o.v !== undefined) ? (daCo.v === o.v) : (daCo.k === k);
+    }
+    if (chon) b.classList.add('chon');
+    b.addEventListener('click', function(){ bam(c, o, k, b); });
+    boc.appendChild(b);
+  });
+
+  /* ô Khác cho câu chọn nhiều */
+  if (c.kieu === 'nhieu' && c.khac) {
+    E('t-khac-boc').style.display = 'block';
+    E('t-khac').value = (daCo && daCo.khac) ? daCo.khac : '';
+  } else {
+    E('t-khac-boc').style.display = 'none';
+    E('t-khac').value = '';
+  }
+
+  if (c.kieu === 'nhieu') {
+    E('t-tiepboc').style.display = 'block';
+    capNhatNutTiep(c);
+  } else {
+    E('t-tiepboc').style.display = 'none';
+  }
+}
+
+function capNhatNutTiep(c){
+  var t = traLoi[c.id];
+  var coChon = t && ((t.vs && t.vs.length > 0) || (t.khac && t.khac.trim()));
+  E('b-tiep').disabled = !coChon;
+}
+
+function bam(c, o, k, nut){
+  if (c.kieu === 'nhieu') {
+    var t = traLoi[c.id] || {vs:[], khac:''};
+    var vs = (t.vs || []).slice();
+    var ma = o.v;
+    if (o.rieng) {
+      vs = (vs.indexOf(ma) > -1) ? [] : [ma];
+    } else {
+      var mucRieng = c.ds.filter(function(x){ return x.rieng; }).map(function(x){ return x.v; });
+      vs = vs.filter(function(x){ return mucRieng.indexOf(x) < 0; });
+      var vt = vs.indexOf(ma);
+      if (vt > -1) vs.splice(vt,1); else vs.push(ma);
+    }
+    traLoi[c.id] = {vs:vs, khac: t.khac || ''};
+    /* cập nhật giao diện tại chỗ, không vẽ lại cả câu (giữ ô Khác) */
+    var nutDs = E('t-ds').querySelectorAll('.da');
+    c.ds.forEach(function(o2, k2){
+      var ma2 = (o2.v !== undefined) ? o2.v : k2;
+      if (vs.indexOf(ma2) > -1) nutDs[k2].classList.add('chon');
+      else nutDs[k2].classList.remove('chon');
+    });
+    capNhatNutTiep(c);
+    return;
+  }
+
+  traLoi[c.id] = (o.v !== undefined) ? {v:o.v, d:o.d} : {k:k, d:o.d};
+  var ds = E('t-ds').querySelectorAll('.da');
+  for (var i=0;i<ds.length;i++) ds[i].classList.remove('chon');
+  nut.classList.add('chon');
+  dangChuyen = true;
+  setTimeout(function(){ dangChuyen = false; sangCauKe(); }, 210);
+}
+
+document.addEventListener('input', function(e){
+  if (e.target && e.target.id === 't-khac') {
+    var c = CAU[viTri];
+    var t = traLoi[c.id] || {vs:[]};
+    t.khac = e.target.value;
+    traLoi[c.id] = t;
+    capNhatNutTiep(c);
+  }
+});
+
+function sangCauKe(){
+  if (viTri < CAU.length - 1) { viTri++; veCau(); window.scrollTo(0,0); }
+  else { moMan('m-lead'); }
+}
+function quayLui(){
+  if (dangChuyen) return;
+  if (viTri > 0) { viTri--; veCau(); window.scrollTo(0,0); }
+  else { moMan('m-dau'); }
+}
+
+/* ===== CHẤM ĐIỂM (thang IIEF, ngưỡng Cappelleri Urology 1999) ===== */
+function diemCua(id){ var t = traLoi[id]; return (t && typeof t.d === 'number') ? t.d : 0; }
+function chamDiem(){
+  var EF = diemCua('q1')+diemCua('q2')+diemCua('q4')+diemCua('q5')+diemCua('q15')+diemCua('q3'); /* EF: Q1,Q2,Q3,Q4,Q5,Q15 */
+  var OF = diemCua('q9')+diemCua('q10');
+  var SD = diemCua('q11')+diemCua('q12');
+  var IS = diemCua('q6')+diemCua('q7')+diemCua('q8');
+  var OS = diemCua('q13')+diemCua('q14');
+  var khong = 0;
+  ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10'].forEach(function(id){
+    if (traLoi[id] && traLoi[id].d === 0) khong++;
+  });
+  return {EF:EF, OF:OF, SD:SD, IS:IS, OS:OS, soKhong:khong};
+}
+/* Lưu ý IIEF: EF domain gồm Q1,Q2,Q3,Q4,Q5,Q15. Trong bài q3 là IIEF Q3 (đưa vào được),
+   q4 là IIEF Q4 (giữ sau khi vào). Cả hai đều thuộc EF. */
+function xepMuc(ef){
+  if (ef >= 26) return {ten:'Không có rối loạn cương', mau:'var(--tot)', ma:'khong'};
+  if (ef >= 22) return {ten:'Rối loạn cương mức độ nhẹ', mau:'var(--canh)', ma:'nhe'};
+  if (ef >= 17) return {ten:'Rối loạn cương nhẹ đến trung bình', mau:'var(--nang-vua)', ma:'nhe_vua'};
+  if (ef >= 11) return {ten:'Rối loạn cương mức độ trung bình', mau:'var(--nang-vua)', ma:'vua'};
+  return {ten:'Rối loạn cương mức độ nặng', mau:'var(--nang)', ma:'nang'};
+}
+function mauTheoTyLe(p){
+  if (p >= 0.80) return 'var(--tot)';
+  if (p >= 0.60) return 'var(--canh)';
+  if (p >= 0.40) return 'var(--nang-vua)';
+  return 'var(--nang)';
+}
+
+/* ===== NHẬN ĐỊNH RIÊNG ===== */
+function co(id, ma){ var t = traLoi[id]; if (!t) return false; if (t.vs) return t.vs.indexOf(ma) > -1; return t.v === ma; }
+function nhieuHon(id, n){ var t = traLoi[id]; if (!t || !t.vs) return false; return t.vs.filter(function(x){ return x !== 'khong'; }).length >= n; }
+
+function taoNhanDinh(d, muc){
+  var ra = [];
+  var sangTot = co('sang','deu');
+  var sangKem = co('sang','hiem') || co('sang','khong');
+
+  if (sangTot && (co('batdau','dotngot') || co('batdau','hoancanh'))) {
+    ra.push({td:'Hồ sơ của anh nghiêng về nguyên nhân tâm lý, đây là nhóm cải thiện tốt nhất',
+      nd:['Anh còn cương tự nhiên buổi sáng, nghĩa là mạch máu và thần kinh chi phối việc cương vẫn hoạt động bình thường. Cộng với việc tình trạng xuất hiện đột ngột hoặc chỉ trong một số hoàn cảnh, phần nhiều nguyên nhân nằm ở căng thẳng, lo lắng và áp lực tâm lý. Nhóm này thường phục hồi tốt khi gỡ đúng nút thắt tâm lý và tập lại cơ sàn chậu.']});
+  } else if (sangKem && co('batdau','giamdan')) {
+    ra.push({td:'Hồ sơ của anh nghiêng về nguyên nhân thực thể, nên kiểm tra sớm',
+      nd:['Cương buổi sáng thưa dần rồi mất, kèm tình trạng đi xuống từ từ qua nhiều tháng, là dấu hiệu thường gặp ở nhóm nguyên nhân thực thể: mạch máu, đường huyết hoặc nội tiết. Nhóm này ít khi tự cải thiện nếu không tìm đúng nguyên nhân. Anh nên đi kiểm tra đường huyết, mỡ máu, huyết áp và xét nghiệm testosterone.']});
+  } else {
+    ra.push({td:'Nguyên nhân của anh có thể đến từ cả hai phía',
+      nd:['Các dấu hiệu hiện có chưa nghiêng hẳn về tâm lý hay thực thể. Ở nam giới trung niên, phần lớn là nhóm pha trộn: một phần do mạch máu và nội tiết đi xuống theo tuổi, một phần do áp lực và mất tự tin. Hướng xử lý vì thế nên làm song song cả hai.']});
+  }
+
+  if (nhieuHon('benh',1)) {
+    var ds = [];
+    if (co('benh','tieuduong')) ds.push('tiểu đường');
+    if (co('benh','huyetap')) ds.push('huyết áp cao');
+    if (co('benh','momau')) ds.push('mỡ máu cao');
+    if (co('benh','tim')) ds.push('bệnh tim mạch');
+    if (co('benh','bung')) ds.push('vòng bụng lớn');
+    var ndB = ['Anh đang có ' + ds.join(', ') + '. Việc cương phụ thuộc vào lượng máu chảy vào dương vật, mà đây đều là những bệnh làm hỏng thành mạch. Đây là một phần nguyên nhân trực tiếp, không phải bệnh đi kèm.'];
+    if (co('benh','tieuduong')) ndB.push('Riêng tiểu đường làm tăng đáng kể nguy cơ rối loạn cương, nên kiểm soát đường huyết là một phần của việc điều trị.');
+    ra.push({td:'Bệnh nền đang tác động trực tiếp lên tình trạng của anh', nd:ndB,
+      nguon: co('benh','tieuduong') ? 'Rối loạn cương ở bệnh nhân tiểu đường type 2, phân tích gộp, Expert Rev Endocrinol Metab 2025 (PMID 39998916).' : ''});
+  }
+
+  if (nhieuHon('thuoc',1)) {
+    ra.push({td:'Thuốc anh đang dùng có thể là một phần nguyên nhân',
+      nd:['Một số nhóm thuốc dùng dài ngày, nhất là thuốc hạ huyết áp và thuốc chống trầm cảm, an thần, có tác dụng phụ làm giảm khả năng cương và giảm ham muốn. Đây là nguyên nhân sửa được. Anh không tự ý ngưng thuốc, mà mang đúng vấn đề này nói với bác sĩ đã kê đơn, vì trong cùng nhóm bệnh thường có thuốc khác ít ảnh hưởng hơn.']});
+  }
+
+  if (co('dadung','bilai')) {
+    ra.push({td:'Anh đang ở nhóm dùng thuốc rồi bị lại',
+      nd:['Uống vào thì được, ngưng thì trở về như cũ, đó là bản chất của thuốc cương tức thời. Nó làm giãn mạch cho một lần quan hệ chứ không sửa được cái gốc. Muốn thoát vòng lặp này thì phải xử lý phần gốc song song.']});
+  } else if (co('dadung','phuthuoc')) {
+    ra.push({td:'Anh đang phụ thuộc vào thuốc, cần xử lý cả phần tâm lý',
+      nd:['Khi đã đến mức gần như phải có thuốc mới dám quan hệ, ngoài phần thể chất còn có nỗi sợ thất bại. Lớp tâm lý này tự nó cũng gây ra rối loạn cương. Anh nên được đánh giá lại bài bản thay vì tăng liều.']});
+  } else if (co('dadung','khongdo')) {
+    ra.push({td:'Anh đã dùng thuốc nhưng không cải thiện, đây là dấu hiệu cần khám',
+      nd:['Không đáp ứng với thuốc thường chỉ điểm nguyên nhân thực thể đã rõ, hoặc trước giờ dùng chưa đúng cách. Cả hai đều cần bác sĩ khám trực tiếp.']});
+  }
+
+  if (nhieuHon('noitiet',3)) {
+    ra.push({td:'Anh có nhiều dấu hiệu gợi ý suy giảm nội tiết nam',
+      nd:['Mệt mỏi không rõ lý do, mỡ bụng tăng trong khi cơ giảm, dễ cáu gắt, ham muốn tụt, khi nhiều dấu hiệu này cùng xuất hiện thì đó là bộ dấu hiệu quen thuộc của suy giảm testosterone ở nam giới trung niên (mãn dục nam). Việc nên làm là xét nghiệm testosterone toàn phần vào buổi sáng, khoảng 7 đến 10 giờ.'],
+      nguon:'Nhóm dấu hiệu lấy theo bộ sàng lọc ADAM, dùng để gợi ý đi xét nghiệm chứ không kết luận (Cureus 2020, PMID 33409035).'});
+  }
+
+  if (co('than','tieudem') || co('than','tieukho') || co('than','daulung')) {
+    var ndT = [];
+    if (co('than','tieudem')) ndT.push('Tiểu đêm từ 2 lần trở lên ở nam giới trung niên có liên hệ với tình trạng xơ vữa mạch máu, cùng một gốc mạch máu gây ra rối loạn cương.');
+    if (co('than','tieukho')) ndT.push('Tiểu khó, tia yếu, tiểu không hết là dấu hiệu nên kiểm tra tuyến tiền liệt.');
+    if (co('than','daulung')) ndT.push('Đau lưng mỏi gối kéo dài đi kèm các dấu hiệu trên nên được khám cùng lúc.');
+    ra.push({td:'Dấu hiệu về thận và tiết niệu của anh nên được xem cùng lúc', nd:ndT,
+      nguon: co('than','tieudem') ? 'Xơ vữa mạch liên quan chức năng cương và triệu chứng đường tiểu, nhất là tiểu đêm (Prostate Int 2017, PMID 28593169).' : ''});
+  }
+
+  if (co('baolau','d3t')) {
+    ra.push({td:'Anh đang ở giai đoạn dễ đảo ngược nhất',
+      nd:['Dưới 3 tháng là giai đoạn sớm, mô cương thường chưa thay đổi cấu trúc, can thiệp đúng cách cho kết quả nhanh hơn để lâu. Đây là lợi thế của anh.']});
+  } else if (co('baolau','tren3n')) {
+    ra.push({td:'Tình trạng đã kéo dài trên 3 năm, cần kiên trì hơn',
+      nd:['Sau vài năm, ngoài nguyên nhân ban đầu còn cộng thêm việc mô cương kém đàn hồi dần và tâm lý né tránh thành nếp. Vẫn cải thiện được, nhưng lộ trình cần dài hơn và làm đủ.']});
+  }
+
+  if (co('xuattinh','d1p') || co('xuattinh','1_3p')) {
+    var duoi1 = co('xuattinh','d1p');
+    ra.push({td: duoi1 ? 'Anh còn có dấu hiệu xuất tinh sớm rõ' : 'Anh còn có dấu hiệu xuất tinh sớm',
+      nd:[duoi1
+          ? 'Dưới 1 phút là mốc y văn quốc tế dùng để xác định xuất tinh sớm. Đây là vấn đề riêng, nằm cạnh chuyện cương, cần cách xử lý riêng.'
+          : 'Khoảng 1 đến 3 phút nằm trong vùng được xem là xuất tinh sớm mắc phải. Đây là vấn đề riêng, cần xử lý riêng chứ không gộp với chuyện cương.',
+          'Tin tốt: nhóm này đáp ứng tốt với tập luyện. Một nghiên cứu trên nam giới xuất tinh sớm nguyên phát cho thấy sau 12 tuần phục hồi cơ sàn chậu, 82,5% kiểm soát được, thời gian trung bình tăng lên khoảng 146 giây.'],
+      nguon:'Pastore AL và cộng sự, Therapeutic Advances in Urology 2014 (PMID 24883105). Nghiên cứu này trên xuất tinh sớm nguyên phát, kết quả chỉ mang tính tham khảo cho các nhóm khác.'});
+  }
+
+  if (muc.ma !== 'khong' && (co('benh','tim') || co('benh','tieuduong') || co('benh','huyetap') || co('benh','momau') || muc.ma === 'vua' || muc.ma === 'nang')) {
+    ra.push({td:'Điều ít người biết: đây có thể là tín hiệu sớm của tim mạch',
+      nd:['Mạch máu nuôi dương vật nhỏ hơn mạch vành nuôi tim nhiều lần, nên khi thành mạch bắt đầu hỏng thì chỗ nhỏ tắc trước. Vì vậy rối loạn cương thường xuất hiện trước cơn đau ngực. Trong một nghiên cứu trên 300 bệnh nhân đã được chụp mạch vành xác nhận có bệnh, ở nhóm vừa có bệnh mạch vành vừa có rối loạn cương, 67% cho biết trục trặc chuyện chăn gối đến trước, trung bình sớm hơn khoảng 3 năm. Đây là lý do anh nên kiểm tra cả tim mạch, không chỉ khám nam khoa.'],
+      nguon:'Montorsi F và cộng sự, European Urology 2003 (PMID 12932937).'});
+  }
+  return ra;
+}
+
+function taoViecCanLam(){
+  var v = [];
+  v.push({td:'Tập cơ sàn chậu, việc có bằng chứng mạnh nhất mà anh tự làm được',
+    nd:'Trong thử nghiệm có đối chứng trên 55 nam giới rối loạn cương, sau 6 tháng tập cơ sàn chậu kèm phản hồi sinh học, 40% lấy lại chức năng bình thường và 34,5% cải thiện rõ. Bài tập không tốn tiền, làm được mọi lúc, nhưng phải đúng cơ và đủ đều.',
+    nguon:'Dorey G và cộng sự, British Journal of General Practice 2004 (PMID 15527607).'});
+  if (co('thoiquen','itvandong') || co('thoiquen','ngoinhieu') || co('benh','bung')) {
+    v.push({td:'Vận động 160 phút mỗi tuần',
+      nd:'40 phút vận động vừa đến mạnh, 4 buổi mỗi tuần, duy trì 6 tháng thì cải thiện được chức năng cương ở nam giới do ít vận động, béo phì, huyết áp cao hoặc hội chứng chuyển hóa. Đi bộ nhanh, đạp xe, bơi đều được.',
+      nguon:'Gerbild H và cộng sự, Sexual Medicine 2018 (PMID 29661646).'});
+  }
+  if (co('benh','bung') || co('benh','momau') || co('noitiet','moco')) {
+    v.push({td:'Giảm cân, nhưng phải giảm đủ',
+      nd:'Thử nghiệm trên 110 nam giới béo phì bị rối loạn cương: nhóm giảm trên 10% cân nặng và tăng vận động, sau 2 năm có 17 trên 55 người đạt điểm chức năng cương về bình thường, so với 3 trên 55 ở nhóm đối chứng. Khoảng một phần ba, gấp gần 6 lần nhóm không thay đổi.',
+      nguon:'Esposito K và cộng sự, JAMA 2004 (PMID 15213209).'});
+  }
+  if (co('thoiquen','thuocla')) {
+    v.push({td:'Bỏ thuốc lá',
+      nd:'Nghiên cứu theo dõi độ cương ban đêm bằng máy cho thấy chỉ sau 24 giờ ngưng hút thuốc, các chỉ số đã cải thiện có ý nghĩa. Nicotine làm co mạch, bỏ được là mạch máu hưởng lợi gần như ngay.',
+      nguon:'Cessation of smoking rapidly decreases erectile dysfunction, Endocrine Practice 1998 (PMID 15251760).'});
+  }
+  if (co('thoiquen','thieungu') || co('noitiet','ngukem')) {
+    v.push({td:'Ngủ đủ',
+      nd:'Thử nghiệm trên JAMA cho thấy chỉ hạn chế giấc ngủ trong 1 tuần đã làm giảm testosterone ở nam giới trẻ khỏe mạnh. Ngủ dưới 6 tiếng kéo dài là tự cắt nguồn nội tiết. Mục tiêu: 7 tiếng mỗi đêm, ngủ trước 23 giờ.',
+      nguon:'Leproult R, Van Cauter E, JAMA 2011 (PMID 21632481).'});
+  }
+  if (co('thoiquen','ruou')) {
+    v.push({td:'Giảm rượu bia',
+      nd:'Rượu bia thường xuyên ảnh hưởng cả nội tiết lẫn thần kinh chi phối cương. Không cần bỏ hẳn ngay, nhưng nên cắt xuống mức có kiểm soát và tránh uống trước khi quan hệ.'});
+  }
+  return v;
+}
+
+/* ===== VẼ KẾT QUẢ ===== */
+function veKetQua(ten){
+  var d = chamDiem();
+  var muc = xepMuc(d.EF);
+  var nd = taoNhanDinh(d, muc);
+  var vc = taoViecCanLam();
+  var xts = co('xuattinh','d1p') || co('xuattinh','1_3p');
+  var h = '';
+
+  h += '<div class="kq-dau">';
+  h += '<div class="kq-nhan">Điểm chức năng cương của anh</div>';
+  h += '<div class="kq-so" style="color:'+muc.mau+'">'+d.EF+'</div>';
+  h += '<div class="kq-tren">trên tổng 30 điểm</div>';
+  h += '<div class="kq-muc" style="color:'+muc.mau+';border-color:'+muc.mau+'"><span class="cham" style="background:'+muc.mau+'"></span>'+muc.ten+'</div>';
+  h += '<div class="kq-tren" style="margin-top:12px;font-size:13.5px;max-width:360px;margin-left:auto;margin-right:auto">Đây là mức <b>tham khảo</b> theo thang điểm IIEF, giúp anh hiểu tình trạng của mình, không phải kết luận chẩn đoán.</div>';
+  h += '</div>';
+
+  if (d.soKhong >= 3) {
+    h += '<div class="the" style="margin-top:18px"><p><b>Một lưu ý.</b> Anh chọn "không hoạt động tình dục" hoặc "không quan hệ" ở '+d.soKhong+' câu. Thang IIEF tính những câu này bằng 0 điểm, nên điểm ở trên đang thấp hơn khả năng thật. Anh nên đọc phần nhận định bên dưới nhiều hơn là chỉ nhìn con số.</p></div>';
+  }
+
+  var bo = [
+    {ten:'Khả năng cương cứng', diem:d.EF, max:30, mau:muc.mau},
+    {ten:'Sự hài lòng khi quan hệ', diem:d.IS, max:15},
+    {ten:'Khả năng đạt cực khoái', diem:d.OF, max:10},
+    {ten:'Ham muốn tình dục', diem:d.SD, max:10},
+    {ten:'Hài lòng chung về đời sống tình dục', diem:d.OS, max:10}
+  ];
+  h += '<h2>Năm nhóm chỉ số của anh</h2><div class="the">';
+  bo.forEach(function(x){
+    var p = x.max ? (x.diem / x.max) : 0;
+    var mau = x.mau || mauTheoTyLe(p);
+    h += '<div class="chi-so"><div class="cs-hang"><span class="cs-ten">'+x.ten+'</span><span class="cs-diem">'+x.diem+'/'+x.max+'</span></div>';
+    h += '<div class="cs-ray"></div></div>';
+  });
+  h += '</div>';
+
+  h += '<h2>Điều đáng chú ý trong hồ sơ của anh</h2>';
+  nd.forEach(function(x){
+    h += '<div class="the"><h3>'+x.td+'</h3>';
+    x.nd.forEach(function(p){ h += '<p>'+p+'</p>'; });
+    if (x.nguon) h += '<p class="nguon">Nguồn: '+x.nguon+'</p>';
+    h += '</div>';
+  });
+
+  h += '<h2>Việc anh nên làm, có liều lượng cụ thể</h2>';
+  vc.forEach(function(x){
+    h += '<div class="the"><h3>'+x.td+'</h3><p>'+x.nd+'</p>';
+    if (x.nguon) h += '<p class="nguon">Nguồn: '+x.nguon+'</p>';
+    h += '</div>';
+  });
+
+  h += '<h2>Phải đi khám ngay nếu có những dấu hiệu này</h2>';
+  h += '<div class="the co-do"><h3>Đây là những dấu hiệu không được chờ</h3><ul>';
+  h += '<li>Đau ngực hoặc khó thở khi gắng sức, kể cả khi quan hệ</li>';
+  h += '<li>Mất cương đột ngột hoàn toàn, kèm tê bì hoặc yếu hai chân</li>';
+  h += '<li>Cương cứng đau kéo dài trên 4 tiếng không xìu, đây là cấp cứu, phải đến bệnh viện ngay</li>';
+  h += '<li>Đau khi cương, hoặc dương vật cong vẹo biến dạng rõ</li>';
+  h += '<li>Tiểu ra máu, hoặc tiểu buốt kéo dài</li>';
+  h += '<li>Sụt cân nhanh không rõ lý do</li>';
+  h += '</ul></div>';
+
+  h += '<div class="cta">';
+  h += '<h3>'+(xts ? 'Nhận lộ trình cải thiện xuất tinh sớm' : 'Nhận lộ trình cải thiện dành cho anh')+'</h3>';
+  h += '<p>'+(ten ? ten+', đ' : 'Đ')+'ội ngũ Giữ Lửa sẽ gửi anh lộ trình '+(xts ? 'kiểm soát xuất tinh' : 'cải thiện')+' miễn phí qua Zalo, soạn theo đúng những gì anh vừa trả lời, có bài tập, có liều lượng, có mốc theo tuần.</p>';
+  h += '<button class="nut" id="b-zalo">Nhận lộ trình qua Zalo</button></div>';
+
+  h += '<details><summary>Bài đánh giá này dựa trên nghiên cứu nào?</summary><ul class="nguon-ds">';
+  h += '<li>Rosen RC và cộng sự. Thang đo quốc tế chức năng cương IIEF. <i>Urology</i> 1997 (PMID 9187685).</li>';
+  h += '<li>Cappelleri JC và cộng sự. Ngưỡng phân loại mức độ rối loạn cương. <i>Urology</i> 1999 (PMID 10443736).</li>';
+  h += '<li>Dorey G và cộng sự. <i>Br J Gen Pract</i> 2004 (PMID 15527607).</li>';
+  h += '<li>Pastore AL và cộng sự. <i>Ther Adv Urol</i> 2014 (PMID 24883105).</li>';
+  h += '<li>Montorsi F và cộng sự. <i>Eur Urol</i> 2003 (PMID 12932937).</li>';
+  h += '<li>Gerbild H và cộng sự. <i>Sex Med</i> 2018 (PMID 29661646).</li>';
+  h += '<li>Esposito K và cộng sự. <i>JAMA</i> 2004 (PMID 15213209).</li>';
+  h += '<li>Guay AT và cộng sự. <i>Endocr Pract</i> 1998 (PMID 15251760).</li>';
+  h += '<li>Leproult R, Van Cauter E. <i>JAMA</i> 2011 (PMID 21632481).</li>';
+  h += '<li>Bộ sàng lọc mãn dục nam ADAM. <i>Cureus</i> 2020 (PMID 33409035).</li>';
+  h += '<li>Rối loạn cương ở bệnh nhân tiểu đường type 2. <i>Expert Rev Endocrinol Metab</i> 2025 (PMID 39998916).</li>';
+  h += '<li>Tiểu đêm, xơ vữa mạch và chức năng cương. <i>Prostate Int</i> 2017 (PMID 28593169).</li>';
+  h += '</ul></details>';
+
+  h += '<div class="chan">Kết quả này giúp anh hiểu tình trạng của mình và trao đổi với bác sĩ.<br>Nó không phải là chẩn đoán y khoa và không thay thế việc khám trực tiếp.<br><br>© Giữ Lửa</div>';
+  h += '<div class="tiep-boc" style="margin-top:18px"><button class="nut phu" id="b-lam-lai">Làm lại từ đầu</button></div>';
+
+  E('kq-noidung').innerHTML = h;
+
+  var rays = E('kq-noidung').querySelectorAll('.cs-ray');
+  bo.forEach(function(x, i){
+    if (!rays[i]) return;
+    var p = x.max ? (x.diem / x.max) : 0;
+    var mau = x.mau || mauTheoTyLe(p);
+    rays[i].style.background = 'rgba(255,255,255,.08)';
+    var fill = document.createElement('i');
+    fill.style.width = Math.max(p*100, 2) + '%';
+    fill.style.background = mau;
+    rays[i].appendChild(fill);
+  });
+
+  E('b-zalo').addEventListener('click', function(){
+    var loi = 'Chào đội ngũ Giữ Lửa, tôi vừa làm bài đánh giá trên web. Điểm chức năng cương của tôi là ' + d.EF + '/30 (' + muc.ten + '). Tôi muốn nhận lộ trình cải thiện.';
+    try { if (navigator.clipboard) navigator.clipboard.writeText(loi); } catch(e){}
+    window.open('https://zalo.me/' + SO_ZALO, '_blank');
+  });
+  E('b-lam-lai').addEventListener('click', function(){
+    traLoi = {}; viTri = 0;
+    E('i-ten').value = ''; E('i-sdt').value = ''; E('i-dongy').checked = false;
+    moMan('m-dau');
+  });
+  moMan('m-kq');
+}
+
+/* ===== GỬI SỐ VỀ ===== */
+function guiLead(gt){
+  try {
+    var kho = JSON.parse(localStorage.getItem('giulua_lead') || '[]');
+    kho.push(gt);
+    localStorage.setItem('giulua_lead', JSON.stringify(kho));
+  } catch(e){}
+  if (!DUONG_NOI_LEAD) return;
+  try {
+    fetch(DUONG_NOI_LEAD, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(gt)}).catch(function(){});
+  } catch(e){}
+}
+function chuanSdt(s){
+  var x = (s||'').replace(/[\s.\-()]/g,'');
+  if (x.indexOf('+84') === 0) x = '0' + x.slice(3);
+  else if (x.indexOf('84') === 0 && x.length === 11) x = '0' + x.slice(2);
+  return x;
+}
+function sdtHopLe(s){ return /^0[35789][0-9]{8}$/.test(s); }
+
+/* ===== NỐI SỰ KIỆN ===== */
+E('b-batdau').addEventListener('click', function(){ viTri = 0; veCau(); moMan('m-hoi'); });
+E('b-lui').addEventListener('click', quayLui);
+E('b-lui2').addEventListener('click', function(){ moMan('m-hoi'); viTri = CAU.length - 1; veCau(); });
+E('b-tiep').addEventListener('click', function(){
+  if (dangChuyen) return;
+  var c = CAU[viTri];
+  if (c.kieu !== 'nhieu') return;
+  var t = traLoi[c.id];
+  var coChon = t && ((t.vs && t.vs.length) || (t.khac && t.khac.trim()));
+  if (!coChon) return;
+  dangChuyen = true;
+  setTimeout(function(){ dangChuyen = false; }, 250);
+  sangCauKe();
+});
+E('b-xem').addEventListener('click', function(){
+  var ten = E('i-ten').value.trim();
+  var sdt = chuanSdt(E('i-sdt').value);
+  var ok = true;
+  if (ten.length < 2) { E('e-ten').textContent = 'Anh cho biết tên để tiện xưng hô.'; ok = false; } else E('e-ten').textContent = '';
+  if (!sdtHopLe(sdt)) { E('e-sdt').textContent = 'Số Zalo chưa đúng. Anh nhập 10 số, ví dụ 0912345678.'; ok = false; } else E('e-sdt').textContent = '';
+  if (!E('i-dongy').checked) { E('e-dongy').textContent = 'Anh vui lòng tích vào ô đồng ý để nhận kết quả.'; ok = false; } else E('e-dongy').textContent = '';
+  if (!ok) return;
+  var d = chamDiem();
+  var muc = xepMuc(d.EF);
+  guiLead({ten:ten, sdt:sdt, tuoi:(traLoi.tuoi&&traLoi.tuoi.v)||'', diem_cuong:d.EF, muc_do:muc.ten, diem_cuc_khoai:d.OF, diem_ham_muon:d.SD, diem_hai_long_qh:d.IS, diem_hai_long_chung:d.OS, tra_loi:traLoi, luc:new Date().toISOString()});
+  veKetQua(ten);
+});
+E('i-ten').addEventListener('keydown', function(e){ if (e.key === 'Enter') E('i-sdt').focus(); });
+E('i-sdt').addEventListener('keydown', function(e){ if (e.key === 'Enter') E('b-xem').click(); });
+</script>
+</body>
+</html>
