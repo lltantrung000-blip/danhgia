@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="robots" content="noindex">
+<title>Đánh giá mức độ xuất tinh sớm (PEDT)</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --nen:#0a0a0a; --the:#151515; --the-2:#1d1d1d;
+  --vien:rgba(255,255,255,.10); --vien-manh:rgba(255,255,255,.22);
+  --chu:#f5f5f5; --chu-2:#b4b4b8; --chu-mo:#8a8a90;
+  --vang:#FBBF24; --vang-2:#D4A843;
+  --tot:#0ca30c; --canh:#fab219; --nang-vua:#ec835a; --nang:#d03b3b;
+  --r:14px;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--nen); color:var(--chu);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",system-ui,sans-serif;
+  font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+.boc{
+  max-width:520px; margin:0 auto; min-height:100vh; min-height:100dvh;
+  display:flex; flex-direction:column;
+  padding:0 18px calc(28px + env(safe-area-inset-bottom));
+}
+.man{display:none; flex:1; flex-direction:column; animation:hien .22s ease}
+.man.mo{display:flex}
+@keyframes hien{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.man{animation:none}}
+
+/* MÀN MỞ ĐẦU */
+#m-dau{justify-content:center;padding-bottom:24px}
+.dau{text-align:center;padding-top:calc(20px + env(safe-area-inset-top))}
+.anh{width:92px;height:92px;border-radius:50%;object-fit:cover;border:2px solid var(--vang-2);display:block;margin:0 auto 16px}
+.hieu{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:var(--vang-2);font-weight:700}
+h1{font-size:28px;line-height:1.28;font-weight:800;margin:12px 0 14px;letter-spacing:-.4px}
+.dan{color:var(--chu-2);font-size:16px;margin-bottom:22px;line-height:1.6}
+.dan b{color:var(--chu);font-weight:650}
+.chip{display:inline-flex;align-items:center;gap:8px;background:var(--the);border:1px solid var(--vien);border-radius:999px;padding:8px 15px;font-size:13.5px;color:var(--chu-2);margin-bottom:26px}
+.chip b{color:var(--vang);font-weight:700}
+
+/* NÚT */
+.nut{
+  display:block;width:100%;min-height:56px;border:0;border-radius:var(--r);
+  background:var(--vang); color:#1a1200; font-weight:800; font-size:17.5px;
+  font-family:inherit; cursor:pointer; padding:15px 18px; text-align:center;
+  -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+}
+.nut:active{transform:scale(.985)}
+.nut.phu{background:transparent;color:var(--chu-2);border:1px solid var(--vien-manh);font-weight:600}
+.nut[disabled]{opacity:.4;cursor:not-allowed}
+
+/* ĐẦU MÀN CÂU HỎI */
+.thanh-dau{padding-top:calc(14px + env(safe-area-inset-top));padding-bottom:14px;position:sticky;top:0;background:var(--nen);z-index:5}
+.hang-dau{display:flex;align-items:center;gap:12px;margin-bottom:11px;min-height:48px}
+.lui{
+  flex:0 0 auto;width:48px;height:48px;border-radius:50%;border:1px solid var(--vien-manh);
+  background:transparent;color:var(--chu);font-size:22px;line-height:1;cursor:pointer;
+  display:grid;place-items:center;font-family:inherit;-webkit-tap-highlight-color:transparent;
+}
+.lui:active{background:var(--the-2)}
+.dem{font-size:14px;color:var(--chu-mo);font-weight:600;font-variant-numeric:tabular-nums}
+.phan{margin-left:auto;font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--vang-2);font-weight:700}
+.rai{height:4px;background:rgba(255,255,255,.09);border-radius:2px;overflow:hidden}
+.rai>i{display:block;height:100%;background:var(--vang);border-radius:0 2px 2px 0;transition:width .3s ease;width:0}
+
+/* CÂU HỎI */
+.than{flex:1;padding-top:6px}
+.hoi{font-size:21px;line-height:1.4;font-weight:700;margin-bottom:7px;letter-spacing:-.2px}
+.hoi b{color:var(--vang)}
+.gohoi{font-size:14.5px;color:var(--chu-mo);margin-bottom:16px;line-height:1.5}
+.ds{display:flex;flex-direction:column;gap:10px;padding-bottom:8px}
+.da{
+  display:flex;align-items:center;gap:13px;width:100%;min-height:58px;
+  background:var(--the);border:1px solid var(--vien);border-radius:var(--r);
+  padding:13px 15px;color:var(--chu);font-size:16.5px;line-height:1.4;
+  text-align:left;font-family:inherit;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.da:active{border-color:var(--vien-manh)}
+.da .o{flex:0 0 22px;height:22px;border-radius:50%;border:2px solid var(--vien-manh);display:grid;place-items:center;transition:.15s}
+.da .o::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--vang);transform:scale(0);transition:transform .15s}
+.da.chon{border-color:var(--vang);background:rgba(251,191,36,.09)}
+.da.chon .o{border-color:var(--vang)}
+.da.chon .o::after{transform:scale(1)}
+.tiep-boc{padding:14px 0 4px}
+
+/* FORM */
+.o-nhap{width:100%;min-height:56px;background:var(--the);border:1px solid var(--vien);border-radius:var(--r);padding:15px 16px;color:var(--chu);font-size:17px;font-family:inherit;margin-bottom:4px}
+.o-nhap:focus{outline:none;border-color:var(--vang)}
+.o-nhap::placeholder{color:var(--chu-mo)}
+.nhan{display:block;font-size:14.5px;color:var(--chu-2);margin:16px 0 7px;font-weight:600}
+.loi{color:#ff9a9a;font-size:13.5px;min-height:19px;margin-bottom:2px}
+.rieng-tu{display:flex;gap:10px;background:var(--the);border:1px solid var(--vien);border-radius:var(--r);padding:13px 15px;margin:16px 0 14px;font-size:14px;color:var(--chu-2);line-height:1.5}
+.dong-y{display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-size:14px;color:var(--chu-2);line-height:1.5;-webkit-tap-highlight-color:transparent}
+.dong-y input{flex:0 0 auto;width:24px;height:24px;margin-top:1px;accent-color:var(--vang);cursor:pointer}
+
+/* KẾT QUẢ */
+.kq-dau{text-align:center;padding:26px 0 8px}
+.kq-nhan{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--chu-mo);font-weight:700}
+.kq-so{font-size:64px;font-weight:800;line-height:1.02;margin:8px 0 2px;letter-spacing:-2px}
+.kq-muc{display:inline-flex;align-items:center;gap:9px;margin-top:16px;padding:11px 20px;border-radius:999px;font-weight:800;font-size:18px;border:1.5px solid}
+.kq-muc .cham{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+.kq-ynghia{font-size:15px;color:var(--chu-2);max-width:380px;margin:16px auto 0;line-height:1.6}
+h2{font-size:18.5px;font-weight:750;margin:26px 0 12px;letter-spacing:-.2px}
+.the{background:var(--the);border:1px solid var(--vien);border-radius:var(--r);padding:16px 18px;margin-bottom:11px}
+.the h3{font-size:16px;font-weight:750;margin-bottom:6px;line-height:1.38}
+.the p{font-size:14.5px;color:var(--chu-2);line-height:1.6}
+.chi-so{margin-bottom:17px}
+.cs-hang{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px}
+.cs-ten{font-size:14.5px;color:var(--chu);font-weight:600}
+.cs-ray{height:10px;border-radius:0 4px 4px 0;overflow:hidden;background:rgba(255,255,255,.08)}
+.cs-note{font-size:13px;color:var(--chu-2);margin-top:6px;line-height:1.5}
+.cs-note b{font-weight:700}
+.cs-ray>i{display:block;height:100%;border-radius:0 4px 4px 0;transition:width .5s ease}
+.co-do{border-color:rgba(208,59,59,.42);background:rgba(208,59,59,.08)}
+.co-do h3{color:#ff9d9d}
+.co-do ul{margin:6px 0 0 18px}
+.co-do li{font-size:14px;color:var(--chu-2);line-height:1.55;margin-bottom:5px}
+.cta{background:linear-gradient(160deg,rgba(251,191,36,.16),rgba(212,168,67,.05));border:1px solid rgba(251,191,36,.36);border-radius:var(--r);padding:22px 18px;margin:26px 0 12px;text-align:center}
+.cta h3{font-size:20px;font-weight:800;margin-bottom:8px;line-height:1.32}
+.cta p{font-size:15px;color:var(--chu-2);margin-bottom:16px;line-height:1.6}
+.chan{font-size:12.5px;color:var(--chu-mo);text-align:center;line-height:1.65;margin-top:22px;padding-top:16px;border-top:1px solid var(--vien)}
+.nguon-ds{font-size:12.5px;color:var(--chu-mo);line-height:1.7}
+.nguon-ds li{margin-bottom:5px;margin-left:16px}
+details{margin-top:12px}
+summary{font-size:13.5px;color:var(--chu-mo);cursor:pointer;padding:8px 0;font-weight:600;-webkit-tap-highlight-color:transparent}
+</style>
+</head>
+<body>
+<div class="boc">
+
+<!-- MÀN MỞ ĐẦU -->
+<section class="man mo" id="m-dau">
+  <div class="dau">
+    <img class="anh" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwQDAwQEBAQFBQQFBwsHBwYGBw4KCggLEA4RERAOEA8SFBoWEhMYEw8QFh8XGBsbHR0dERYgIh8cIhocHRz/2wBDAQUFBQcGBw0HBw0cEhASHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBz/wAARCACwALADASIAAhEBAxEB/8QAHQAAAQQDAQEAAAAAAAAAAAAAAgABBAUDBggHCf/EADwQAAEDAgQDBgQEBAUFAAAAAAEAAgMEEQUGEiExQVEHEyJhcYEIFDKhQpGx0RVSwfAWIyQz4YKSoqPC/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQF/8QAIREBAAICAgMBAAMAAAAAAAAAAAECAxESMQQhUUEiQmH/2gAMAwEAAhEDEQA/AOoSTdIX805G5TgLs4Fv1S3804SKKbdMb9U9kiEAEnqmHqU5SQCb9UJJ6lEhKBjw4od+qdNdSQxJ6oST1RJigG/mUxv1TpiigJPVCb9UZQlABugN+qMhCQgxm/VBvcLKQgturAvSN0QCY8U+yIdJOEkAJiiKYoAKEoihJsmwJKBzlExPEqXCaKetrJ2QUsDS+SR5sGhc4Z0+I2plklgy4yKngFw2qqW3e/za07D3ug6WL+CbvBey+fQ7Xc5VONvfBjmIGeR41SCcu2H2A8hYK7wz4hc65bxFuvEziNO03fDWNDwR0uLEeyi6d16kl5t2Y9sGCdpVGRSn5XFIm6pqKRwLgP5mn8TfPiOYC9GDrogrpikkUUJQlGQmKDGmIR2QkIAIQkbhZCENt0FyeJThNe5KXBVBJJBJNhiUJTpKSAKwyOssrlo/azmkZN7PsfxgP0SwUxbE7pI/wN+7r+yEPBO1ztNbm3Gq/B6ap0YJhrzFqa7aolGznk9Adh7leRHDpcSIpsPgknnl8IbGy5PupfZXlKozxmGmoA9zYpnanvA+mNu7nev7rubL2ScGy7Rww0dFCzQ0DWWjUfdcb5uPqHqx4NxuXIdF2KYvguXK6WqoSKqYMcw31EAHcLxzM2Dy02ISCSItLdieBuvpnW0zJonRuYC09V4b2n9ktFi1PNU00bRUkE7DcrhGe0T7emfGpaPXbjvBMwVuWsUoMQw2okgq6V4eyVnFpH6jkRzBIX0F7Os60+fMp4fjVPpa6ZpZNGD/ALcrdnt/PceRC+e2Z8GqsBxCSnnY6N7HEWc233XvXwm517vH8Xy1NJaKuhbVwA8O+Z4XgerLH/pXrrO4eC9eM6dfNN0RQMOyyLTAbJiiKZABCYhEmIQAUNtwshQcwguNNibpWuUfkUKu0IBOQm5pKBihKIoSgBy54+MKvNN2VMpgSBWYhCxwvxDdTrfYLoZy5r+MppfkDCGjj8+XflGVJ6arHtU/C2yGkpMYxEwyT1Efd00bImanG41H0Gy6ZoMwMqpWwSUFdTvJtqni0t/O654+EhslV2fY3LSSsZWyVgZqeLhpEYsSBx4leyYPljMdNmN9bXZknq8M7tv+kfA1oD7bnUOV+AHAdeK8V5/lL6eKN1hdY/W4g4mnw99PAQCZJ5xcMb1svPxieXK6sdTNzPNWYsw2NqjSC7po4ey9BxCKmq6+WGpaHRzMaNJ2vYg/qEFLk/BsLqauspsPpoqiqkM80jYwC+Q8XE9Vzid7d9a0507dez04zgPz1PGPnqVwJ2sXsJsf3XjmX8IquyrM+TsekJa6StaZWA3uwghwv6agR5hdjZtjbO2aF1i1zCCuUe3OjfQUWW5WN0QyVkztAdcRksb4QefC59VcWW0XrSOjPgpOO2Se9O44yCNjccisy1zJeInF8q4HXXJNRRwyE9SWC/3WxhfRfEJMQnTWQCQmIRJigBDzR2Q80FweJTHdNq3KV0Q4CRKa6YlAroSnuhJRQP4Lm74vjqyhgsX81VKf/WP3XSLuC5r+LUg4Rl9pIsJZHEc/whSelr2074K8xMpq3M2ASPs6fu62Fp56LteB7OafYrsOqkldTyupWsfNpOkSGzS7kCRyXzL7N8zVGQc40+LwNLn0UneOiBt3sdyyRvu0lfRLC8bjzNgVJiOCV0Zpq2ISwzluoWI5i/EHYjkQV488TE7+vo+NaLRx+HxOixqqnp5n1VFGwNtM1sLnaiR+F1wRY+t/JTjWCKijjdN3sjG2c48StAxfL+N1zjFPiOKznpC/Qy/W7QP1UvD8OGAUDoT3r53+KSSaRz3H3JK8sy+vk8elKxq8Wn5EGxSb5iaRx3G97r564vmbGczSCbFsTqq0U0umATPJETNRFmjgOS+hWFNpqyXEJMTiqG0MIjiYGtcO+dIDex42AtuOvFeJ/E92SYBgeVsOzHlfC6Shp6SSOmqI6OMNY6NxsxxtxIdYXO5Dt118a8b3Lw+bS2tR+PaOxKt+e7MctSfyU3df9riP6L0UcF4n8L+Iit7MoYdep1JVSxkdAbOH6le2hfSfEJIpJIBSKRSQCh5hEh5oLK+6V0F90rog7p0AKe6ByUBKc3QlFC47Lm34rmtkwvCWk+Jrx7Bzrf0XSLuC5v8Aiela6GjjJPh7txAF+Bf+6krHbkKqOjFGSs8Oon03Fj9wF652E9p2PZUzThWBUzX1mC4tVMimoi0vMTnGxljtuDzI4EA36ryyphHzfdNGsmQmNrRdzhzAHG66i+FzsRzBHmWDOWM0smHYbSxzRU0VQwtlqS9pZqDTu0AOvc7k7AcSszXlGpdIvxncOkp618UFgDYdBe61imazGsUmOISMZh9O3XKyQWa/ewBO23M+i3mrwyXDrRzNDmHZso+l37HyWtYvRxuinY6nY9s7e7cH8LefldfKyRMdvs4LxPqP39bBWaqejdUMl7xps61yQW+W9rWWi5uip8x5frsJr4Wvoqtjo5GkWJa7+oNiD1AW15VglZlijpKlzXywNMJI4WBOn/xsFQY1Tdw6xHhB+y1O5iLJWsVvNJ96eB/CHjQb/iTBHP1GNzJ2X52JY79AfddUBcp9jPZPnLs77RHYvWQUbsDrO+ic6Cra94Y46mOLOPS4XVHfRgbvb+a+rHT4lo1MsqZYhVQuNhI0nyKyFVkySSYoGQ80SHmEE0mxKV0F7kpwiDBT3QXTop7rLTU0lXKI4xdx+yw81eYAzS2eUja4b7c1JIhF/hLhLJFsXNF7ngqDF8oYRiFa041gVBXOtYOnha8gcrXv1K3ysjMU8UrDcOBaShxil7+ijlaPHHuptvTQqfIWC5YpYjl/B8OpKYyGTu2UrAQ88d7X36jcLc8Are91UsgLZPqAkH9VmpI21NI+PmRqHqsXdgTtcRZ4Fr8wgupYY5GOY6Jrmu2LTuD7LTMVwWkOKCGHvCxrC6SAHwtNrtaDxFwCbdOl1tUtXLJRydzYVAabPIuBtxtzUekw5tPhb3wuMhmaXyOcfGXEbm652pFu3Sl5p7iWtCFkEDdDGsjHJgsLf3zVRj2GCrpXOjF3BbfS0VOKfRT3bBawb/VU74tTXMJ6hcMtNPTgy+2nYQ1lRShulrZIT3b9t9uH2Uh9KKiQMbZjBu42+kKFAf4Zjbo37Q1B0HoHcj/fVbI2gaHtYSbOdqcBzAXbBflVy8rHwvPyWajpGMhaWxhsY+lnMnqVkqIw0ari/MKVUzxQhrb+K2zGqJM9opZHPaA52zABwXbbzaR0xTX2SKrJiUPNOhvugl33KcFBfdPdEGCldDdOiiC3LDqQQUDYyPERd3qtUoWCSqjBFxe9utlvMYvDqG4IuFJWESxkiex3FniCmRN76jcwi+yh0TZC5vebg3F1NpHCN7mHgVlpT0f+nqDGeRKOdmmYkcCpVdSET6mm11GlB4OFigyUZBkLTwcEVHM6kZJE4EtY8i3kdwo0bix4PRWGkSslc2xDgPYhBXUMY7pwZ9LXOH3VRVwmKXydf9VbYcdM9bGfwvBHuFIdTQyygyMDiN234LN68o06Uvxnbz3GMvT4m1xhYA47hxNgPdSKZ9UCyKUNNS2MCR4+m9zw9lvtRCHxggbs4W6LWMToS2Xvo2guAJ9lnHiinTeXPbJERP4xx0jX+K49+KjVkLg4l3ACwtwVhSylzL7W8lhqy0tJ4FdXBVA7BIrE2Rxnkjc2wABDhwKyKsyRQ33TkoeaqJF0rob7pXQGCiusYRIM9N3pnj7nUZb+HTxuvQ2B3dNL2WJHit1WrZcpS3VVEbk93H68ytxsCLE7rMtQq6pskUH+R4nhwdbyvuskUzZyHsPjHEIKkmB3iN2ciUGFxMIqw5v0yAtN+ov+qip0n+YwHmFGlaHCzgsxeGi17qNNUMA5IIkkRjcHDdqm0rWkyAXFxct6FQPn4r6S63mplHMBLuORsqIcURirao22cGH7FS5GlrGu6G6i1dSG1elv42t/U/us09S0B0dxcDdBILg5t+AVXVBshcxu4txUtzu7haT47i6h6q2e4hhipYhxlfufZQUtTDHQXeZNMhGzffioUtT3jdTbXB3HJTattDG9zWGSsqD9Uh4XVIx7u/ka+wBIIt0P/P6qqcG7nOvsdx5I7rGw+EIlWJ7MSm5pXQ81UZr7lPdBfdOCgO6cFBdOCg2zAqnXSRRjUO6c4Gw433Fvur8VAY3dpBPNxutewSrDaNjWkFsYJItc6rq0jpqmpIfNJ3TTwY3crMtwkS2fDIZZGFhF7XVJR1z6asdTXLmTN1Md6cvup9YymhAiZTtnndyeQAAOJJA2sqZsTqqY/JlwDHbOcLhRU+etc0FVVTXvNxupjqeVsk8MzfG0ggt3BB81ifhznbiyqKySV0jNbPqHFqsMPxFzXRtLvC7a/RQKqB9GdX4SsNPNeZoYA7U76TyKba0uKqrZFWRyPeNIB+xBWvxY1JUMqZyTvIb+/ALDmqaaliDxG5z2Otoa3c3BHD3CgYXh1QKJzKq7S6QPIad9hwXG+Ti748PKNy9FopxV4VSzRn8Fj5EbH7qLNR/NyNbUVU0mo2EYNmj8lT0GNR4QIoJgxlDI7Tqv9Djz9Ov5rYZCGXcDtbit47xeHPLjmk/4o8WqNDvksOi0tYbOe3meioGMDCLP1uDnBzvMf8/oraurHkGnhOlu9wwbnrc9FVhrRsy2gcLf36rblsQFhsnumumWmCJTX3CRQ8wgy33Ke6Dcngn36ICunuh3SQbRlUMtUOP1XaAPzVq6slrqh8FMS2GM2mm/+W+fU8lq+BTujrDGDbvWlo9eS2WgcYqdsMYFoxvfrzWZhqGHF3mGhtGA3g0kcbLPQMFPSwsZxsD7qjxbMNIKn5J7Zg7+fRdl/VScMrW1EbgyZrhE07g32RpsO3dlwP1G6ElvMhajU5gnpu6Y2IyA8dJO3snhzKJ4tbY7+uyaTZ8yvbLiEbA+zYo92g7EuPE+wCq2Mjb4i+1t7rTMXzREcdxR1XKRaRrGMDrCzWgbe6iSYziE0eqiwutqG8i1hAPubLwW3a06fVpWtaRuXocB7xvePd1+o7rI8sbe7gfRaDDJm6MOfNgxZTgkX74F23O1lWYhjGY5IQYKYs1AbHkOqvC3xOVJ/s27MdZRCie2pnbFGOMhdp0j1VHDmjF6XDY6XCKiLEKZos0yPvI0dNQFiPVeZVeB43jFY+XFJZ5KeIXc0khnpZWmXsp1WH1BqyZI2vafA0kX/JWmPJE7j0t8uLjxt7hsv+O6kuDKtrWxxm1REfC5vmSOXmt4opoZ6WJ8A0wuHhGm1h6LVKXKUVa1kk8szZWuuHsDQ4Dm0m24PQrb4ou5iZGC5waLAuNz+a74YyRM85ePyrYZiIxRpkukCmN+ia3qvQ8ZEpkjfoh3ug//2Q==" alt="Chị Mai, Giữ Lửa">
+    <div class="hieu">Giữ Lửa</div>
+    <h1>Đánh giá mức độ xuất tinh sớm</h1>
+    <p class="dan">Trả lời <b>9 câu</b> để biết chính xác tình trạng của mình đang ở mức nào, và nên làm gì tiếp theo.</p>
+    <div class="chip"><span>⏱</span><span>Khoảng <b>2 phút</b> · Theo thang điểm quốc tế PEDT</span></div>
+  </div>
+  <div class="tiep-boc">
+    <button class="nut" id="b-batdau">Bắt đầu đánh giá</button>
+    <p class="chan" style="border:0;margin-top:14px;padding:0">Kết quả chấm bằng điểm số theo ngưỡng đã công bố y khoa.<br>Đây là bài sàng lọc, không thay thế việc khám bác sĩ.</p>
+  </div>
+</section>
+
+<!-- MÀN CÂU HỎI -->
+<section class="man" id="m-hoi">
+  <div class="thanh-dau">
+    <div class="hang-dau">
+      <button class="lui" id="b-lui" aria-label="Quay lại câu trước">←</button>
+      <span class="dem" id="t-dem">Câu 1/9</span>
+      <span class="phan" id="t-phan"></span>
+    </div>
+    <div class="rai"><i id="t-rai"></i></div>
+  </div>
+  <div class="than">
+    <h2 class="hoi" id="t-hoi"></h2>
+    <p class="gohoi" id="t-gohoi"></p>
+    <div class="ds" id="t-ds"></div>
+  </div>
+  <div class="tiep-boc" id="t-tiepboc" style="display:none">
+    <button class="nut" id="b-tiep">Tiếp tục</button>
+  </div>
+</section>
+
+<!-- MÀN NHẬP THÔNG TIN -->
+<section class="man" id="m-lead">
+  <div class="thanh-dau">
+    <div class="hang-dau">
+      <button class="lui" id="b-lui2" aria-label="Quay lại câu trước">←</button>
+      <span class="dem">Bước cuối</span>
+    </div>
+    <div class="rai"><i style="width:100%"></i></div>
+  </div>
+  <div class="than">
+    <h2 class="hoi" style="margin:14px 0 7px">Kết quả của anh đã sẵn sàng</h2>
+    <p class="gohoi">Anh để lại tên và số Zalo để đội ngũ Giữ Lửa gửi kết quả chi tiết và lộ trình cải thiện riêng cho anh.</p>
+
+    <label class="nhan" for="i-ten">Tên của anh</label>
+    <input class="o-nhap" id="i-ten" type="text" autocomplete="name" placeholder="Ví dụ: Anh Tuấn" enterkeyhint="next">
+    <div class="loi" id="e-ten"></div>
+
+    <label class="nhan" for="i-sdt">Số Zalo</label>
+    <input class="o-nhap" id="i-sdt" type="tel" inputmode="numeric" autocomplete="tel" placeholder="Ví dụ: 0912345678" enterkeyhint="done">
+    <div class="loi" id="e-sdt"></div>
+
+    <div class="rieng-tu">
+      <span>🔒</span>
+      <span>Số của anh chỉ dùng để gửi kết quả và tư vấn. Không quảng cáo làm phiền, không đưa cho bên thứ ba.</span>
+    </div>
+
+    <label class="dong-y" for="i-dongy">
+      <input type="checkbox" id="i-dongy">
+      <span>Tôi đồng ý để đội ngũ Giữ Lửa dùng thông tin và câu trả lời của tôi nhằm soạn kết quả và liên hệ tư vấn.</span>
+    </label>
+    <div class="loi" id="e-dongy"></div>
+  </div>
+  <div class="tiep-boc">
+    <button class="nut" id="b-xem">Xem kết quả của tôi</button>
+  </div>
+</section>
+
+<!-- MÀN KẾT QUẢ -->
+<section class="man" id="m-kq">
+  <div id="kq-noidung"></div>
+</section>
+
+</div>
+
+<script>
+/* ĐƯỜNG NỐI SỐ ĐIỆN THOẠI. Dán link Google Apps Script hoặc API nhận lead vào
+   giữa 2 dấu nháy dưới đây thì số khách tự chảy về. Để trống thì trang vẫn chạy,
+   số được giữ tạm trong trình duyệt của khách. */
+var DUONG_NOI_LEAD = '';
+var SO_ZALO = '0934368434';
+
+function da(bo){ return bo.map(function(x){ return {t:x[0], d:x[1]}; }); }
+
+/* Thang tần suất PEDT (0 đến 4) */
+var TAN_SUAT = [
+  ['Hầu như không, hoặc không bao giờ', 0],
+  ['Ít hơn nửa số lần', 1],
+  ['Khoảng nửa số lần', 2],
+  ['Hơn nửa số lần', 3],
+  ['Gần như luôn luôn', 4]
+];
+var MUC_DO = [
+  ['Không chút nào', 0],
+  ['Hơi hơi', 1],
+  ['Vừa phải', 2],
+  ['Nhiều', 3],
+  ['Rất nhiều', 4]
+];
+
+/* 5 câu PEDT (Symonds, European Urology 2007) + 4 câu yếu tố quan trọng.
+   PEDT: tổng 5 câu, 0 đến 20 điểm. Điểm CÀNG CAO thì dấu hiệu xuất tinh sớm CÀNG RÕ. */
+var CAU = [
+  {id:'q1', phan:'PEDT', pedt:true, kieu:'don',
+   hoi:'Anh thấy <b>khó tới mức nào</b> để kìm lại, không xuất tinh sớm?',
+   ds:da([['Không khó',0],['Hơi khó',1],['Khó vừa',2],['Rất khó',3],['Cực kỳ khó',4]])},
+  {id:'q2', phan:'PEDT', pedt:true, kieu:'don',
+   hoi:'Anh có <b>xuất tinh trước khi mình muốn</b> không?',
+   ds:da(TAN_SUAT)},
+  {id:'q3', phan:'PEDT', pedt:true, kieu:'don',
+   hoi:'Anh có <b>xuất tinh chỉ sau rất ít kích thích</b> không?',
+   ds:da(TAN_SUAT)},
+  {id:'q4', phan:'PEDT', pedt:true, kieu:'don',
+   hoi:'Anh có <b>thấy bực bội, khó chịu</b> vì xuất tinh sớm không?',
+   ds:da(MUC_DO)},
+  {id:'q5', phan:'PEDT', pedt:true, kieu:'don',
+   hoi:'Anh <b>lo tới mức nào</b> rằng xuất tinh sớm khiến bạn đời không thỏa mãn?',
+   ds:da(MUC_DO)},
+
+  {id:'iel', phan:'Yếu tố liên quan', kieu:'don',
+   hoi:'Thường từ khi bắt đầu vào đến khi xuất tinh, anh được khoảng bao lâu?',
+   ds:[{t:'Dưới 1 phút',v:'d1p'},{t:'Khoảng 1 đến 2 phút',v:'1_2p'},{t:'Khoảng 2 đến 5 phút',v:'2_5p'},{t:'Trên 5 phút',v:'tren5p'},{t:'Tôi không rõ',v:'khongro'}]},
+  {id:'tukhinao', phan:'Yếu tố liên quan', kieu:'don',
+   hoi:'Anh bị tình trạng này từ khi nào?',
+   ds:[{t:'Từ những lần quan hệ đầu tiên, luôn như vậy',v:'nguyenphat'},{t:'Trước đây bình thường, gần đây mới bị',v:'macphai'},{t:'Tôi không rõ',v:'khongro'}]},
+  {id:'kemed', phan:'Yếu tố liên quan', kieu:'don',
+   hoi:'Anh có kèm khó cương, hoặc phải quan hệ gấp vì sợ bị xìu không?',
+   ds:[{t:'Không, cương vẫn tốt',v:'khong'},{t:'Có, đôi khi',v:'doikhi'},{t:'Có, thường xuyên',v:'thuongxuyen'}]},
+  {id:'dadung', phan:'Yếu tố liên quan', kieu:'don',
+   hoi:'Trước đây anh đã thử cách nào để kéo dài thời gian chưa? Kết quả thế nào?',
+   ds:[{t:'Chưa thử gì',v:'chua'},{t:'Có thử, lúc dùng thì đỡ, ngưng lại bị lại',v:'bilai'},{t:'Có, giờ gần như phải có thuốc mới ổn',v:'phuthuoc'},{t:'Có thử nhưng không thấy cải thiện',v:'khongdo'}]}
+];
+
+/* ===== TRẠNG THÁI ===== */
+var traLoi = {};
+var viTri = 0;
+var dangChuyen = false;
+function E(id){ return document.getElementById(id); }
+
+function moMan(id){
+  var ds = document.querySelectorAll('.man');
+  for (var i=0;i<ds.length;i++) ds[i].classList.remove('mo');
+  E(id).classList.add('mo');
+  window.scrollTo(0,0);
+}
+
+function veCau(){
+  var c = CAU[viTri];
+  E('t-dem').textContent  = 'Câu ' + (viTri+1) + '/' + CAU.length;
+  E('t-phan').textContent = c.phan;
+  E('t-rai').style.width  = (viTri / CAU.length * 100) + '%';
+  E('t-hoi').innerHTML    = c.hoi;
+  E('t-hoi').style.marginBottom = c.go ? '10px' : '18px';
+  E('t-gohoi').textContent = c.go || '';
+  E('t-gohoi').style.display = c.go ? 'block' : 'none';
+
+  var boc = E('t-ds');
+  boc.innerHTML = '';
+  var daCo = traLoi[c.id];
+  c.ds.forEach(function(o, k){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'da';
+    b.innerHTML = '<span class="o"></span><span>' + o.t + '</span>';
+    var chon = daCo && ((o.v !== undefined) ? (daCo.v === o.v) : (daCo.k === k));
+    if (chon) b.classList.add('chon');
+    b.addEventListener('click', function(){ bam(c, o, k, b); });
+    boc.appendChild(b);
+  });
+  E('t-tiepboc').style.display = 'none';
+}
+
+function bam(c, o, k, nut){
+  traLoi[c.id] = (o.v !== undefined) ? {v:o.v, d:o.d} : {k:k, d:o.d};
+  var ds = E('t-ds').querySelectorAll('.da');
+  for (var i=0;i<ds.length;i++) ds[i].classList.remove('chon');
+  nut.classList.add('chon');
+  dangChuyen = true;
+  setTimeout(function(){ dangChuyen = false; sangCauKe(); }, 210);
+}
+
+function sangCauKe(){
+  if (viTri < CAU.length - 1) { viTri++; veCau(); window.scrollTo(0,0); }
+  else { moMan('m-lead'); }
+}
+function quayLui(){
+  if (dangChuyen) return;
+  if (viTri > 0) { viTri--; veCau(); window.scrollTo(0,0); }
+  else { moMan('m-dau'); }
+}
+
+/* ===== CHẤM ĐIỂM PEDT ===== */
+function diemCua(id){ var t = traLoi[id]; return (t && typeof t.d === 'number') ? t.d : 0; }
+function chamDiem(){
+  return { pedt: diemCua('q1')+diemCua('q2')+diemCua('q3')+diemCua('q4')+diemCua('q5') };
+}
+/* Ngưỡng PEDT (Symonds 2007): dưới hoặc bằng 8 không xuất tinh sớm; 9 đến 10 ranh giới; từ 11 trở lên nhiều khả năng có. */
+function xepMuc(pedt){
+  if (pedt <= 8)  return {ten:'Không có dấu hiệu xuất tinh sớm', mau:'var(--tot)', ma:'khong'};
+  if (pedt <= 10) return {ten:'Ranh giới, cần chú ý', mau:'var(--canh)', ma:'ranh'};
+  return {ten:'Nhiều khả năng bị xuất tinh sớm', mau:'var(--nang)', ma:'co'};
+}
+
+/* Nhãn + lời giải cho từng khía cạnh của PEDT (điểm càng cao càng rõ dấu hiệu). */
+function nhanKhiaCanh(i, s){
+  var tier = s <= 1 ? 'on' : (s === 2 ? 'cy' : 'ro');
+  var CHU = {on:'Ổn', cy:'Cần chú ý', ro:'Rõ rệt'};
+  var MAU = {on:'var(--tot)', cy:'var(--canh)', ro:'var(--nang)'};
+  var GIAI = {
+    0:{on:'Anh vẫn chủ động kìm được, chưa khó khăn nhiều.', cy:'Anh bắt đầu thấy khó kìm lại.', ro:'Anh rất khó chủ động kìm lại, gần như không kiểm soát được thời điểm.'},
+    1:{on:'Anh ít khi bị xuất tinh trước khi muốn.', cy:'Khoảng nửa số lần anh bị xuất tinh sớm hơn mong muốn.', ro:'Phần lớn các lần anh bị xuất tinh trước khi muốn.'},
+    2:{on:'Anh cần kích thích đủ mới xuất tinh, đây là dấu hiệu tốt.', cy:'Đôi khi anh xuất tinh chỉ sau ít kích thích.', ro:'Anh thường xuất tinh chỉ sau rất ít kích thích.'},
+    3:{on:'Việc này chưa gây khó chịu nhiều cho anh.', cy:'Anh đã thấy bực bội vì chuyện này.', ro:'Việc này khiến anh rất khó chịu, ảnh hưởng tâm lý.'},
+    4:{on:'Anh chưa lo nhiều về phía bạn đời.', cy:'Anh có lo bạn đời chưa thỏa mãn.', ro:'Anh lo nhiều rằng bạn đời không thỏa mãn, dễ ảnh hưởng tình cảm.'}
+  };
+  return {chu:CHU[tier], mau:MAU[tier], giai:GIAI[i][tier], p:s/4};
+}
+
+/* ===== NHẬN ĐỊNH RIÊNG (chỉ từ câu trả lời, có nguồn) ===== */
+function co(id, ma){ var t = traLoi[id]; if (!t) return false; return t.v === ma; }
+
+function taoNhanDinh(muc){
+  var ra = [];
+
+  if (co('tukhinao','nguyenphat')) {
+    ra.push({td:'Anh thuộc nhóm bị từ đầu (nguyên phát)',
+      nd:'Anh bị từ những lần quan hệ đầu tiên. Nhóm này thường do phản xạ xuất tinh nhạy sẵn, không phải bệnh. Cách xử lý chính là rèn lại phản xạ, và nhóm này đáp ứng rất tốt với tập luyện.'});
+  } else if (co('tukhinao','macphai')) {
+    ra.push({td:'Anh thuộc nhóm mới bị gần đây (mắc phải)',
+      nd:'Trước đây anh bình thường, gần đây mới bị. Nhóm này thường có nguyên nhân đi kèm như căng thẳng, khó cương, hoặc viêm tuyến tiền liệt. Tìm đúng nguyên nhân thì xử lý được gốc.'});
+  }
+
+  if (muc.ma !== 'khong') {
+    ra.push({td:'Tin tốt: đây là tình trạng cải thiện được',
+      nd:'Trong một nghiên cứu trên nam giới xuất tinh sớm (thời gian dưới 1 phút), sau 12 tuần tập phục hồi cơ sàn chậu, 33 trên 40 người (82,5%) kiểm soát được, thời gian trung bình tăng lên khoảng 2 phút rưỡi. Đây là việc tập được, không cần lệ thuộc thuốc.',
+      nguon:'Pastore AL và cộng sự, Therapeutic Advances in Urology 2014 (PMID 24883105).'});
+  }
+
+  if (co('dadung','bilai') || co('dadung','phuthuoc')) {
+    ra.push({td:'Anh đã thử cách nào đó nhưng bị lại',
+      nd:'Nhiều cách chỉ làm tê tạm thời hoặc kéo dài cho một lần, chứ không rèn lại phản xạ, nên ngưng là trở về như cũ. Muốn bền thì phải tập lại phản xạ và hơi thở, không chỉ dùng mẹo tức thời.'});
+  }
+
+  if (co('kemed','doikhi') || co('kemed','thuongxuyen')) {
+    ra.push({td:'Anh có kèm dấu hiệu khó cương',
+      nd:'Nhiều người xuất tinh sớm vì lo phải quan hệ gấp trước khi bị xìu. Khi có kèm khó cương, thường nên xử lý phần cương trước, vì làm được điều đó thường giúp cải thiện cả hai.'});
+  }
+
+  if (co('iel','d1p') && muc.ma !== 'khong') {
+    ra.push({td:'Thời gian của anh đang rất ngắn',
+      nd:'Dưới 1 phút là mốc y văn dùng để xác định xuất tinh sớm rõ. Để so sánh, ở nam giới nói chung thời gian trung bình khoảng 5 đến 6 phút. Khoảng cách này thu hẹp được bằng tập luyện đúng cách.',
+      nguon:'Waldinger MD và cộng sự, The Journal of Sexual Medicine 2009 (PMID 19627471).'});
+  }
+
+  return ra.slice(0, 3);
+}
+
+/* ===== VẼ KẾT QUẢ ===== */
+function veKetQua(ten){
+  var d = chamDiem();
+  var muc = xepMuc(d.pedt);
+  var nd = taoNhanDinh(muc);
+  var yn = {
+    khong:'Điểm của anh nằm trong ngưỡng bình thường, chưa thấy dấu hiệu rõ của xuất tinh sớm.',
+    ranh:'Anh đang ở ranh giới. Đã có một số dấu hiệu của xuất tinh sớm, nên chú ý và cải thiện sớm.',
+    co:'Anh có nhiều dấu hiệu của xuất tinh sớm. Tin tốt là đây là tình trạng cải thiện được nếu tập đúng cách.'
+  };
+  var h = '';
+
+  h += '<div class="kq-dau">';
+  h += '<div class="kq-nhan">Điểm xuất tinh sớm của anh</div>';
+  h += '<div class="kq-so" style="color:'+muc.mau+'">'+d.pedt+'<span style="font-size:26px;color:var(--chu-mo);font-weight:600">/20</span></div>';
+  h += '<div class="kq-muc" style="color:'+muc.mau+';border-color:'+muc.mau+'"><span class="cham" style="background:'+muc.mau+'"></span>'+muc.ten+'</div>';
+  h += '<div class="kq-ynghia">'+yn[muc.ma]+'</div>';
+  h += '</div>';
+
+  var kc = [
+    {ten:'Khả năng kìm lại', id:'q1'},
+    {ten:'Tần suất bị sớm', id:'q2'},
+    {ten:'Xuất tinh khi mới kích thích nhẹ', id:'q3'},
+    {ten:'Mức khó chịu, bực bội', id:'q4'},
+    {ten:'Lo ảnh hưởng tới bạn đời', id:'q5'}
+  ];
+  h += '<h2>Chi tiết theo 5 khía cạnh</h2><div class="the">';
+  h += '<p style="font-size:12.5px;color:var(--chu-mo);margin:-2px 0 14px;line-height:1.5">Ở mỗi khía cạnh, mức càng cao thì dấu hiệu xuất tinh sớm càng rõ.</p>';
+  kc.forEach(function(x, i){
+    var s = diemCua(x.id);
+    var nn = nhanKhiaCanh(i, s);
+    h += '<div class="chi-so"><div class="cs-hang"><span class="cs-ten">'+x.ten+'</span></div>'
+       + '<div class="cs-ray"></div>'
+       + '<div class="cs-note"><b style="color:'+nn.mau+'">'+nn.chu+'.</b> '+nn.giai+'</div></div>';
+  });
+  h += '</div>';
+
+  if (nd.length) {
+    h += '<h2>Điều đáng chú ý từ câu trả lời của anh</h2>';
+    nd.forEach(function(x){
+      h += '<div class="the"><h3>'+x.td+'</h3><p>'+x.nd+'</p>';
+      if (x.nguon) h += '<p class="nguon" style="font-size:12px;color:var(--chu-mo);margin-top:8px">Nguồn: '+x.nguon+'</p>';
+      h += '</div>';
+    });
+  }
+
+  h += '<h2>Đi khám nếu có dấu hiệu này</h2>';
+  h += '<div class="the co-do"><h3>Những dấu hiệu nên đi khám</h3><ul>';
+  h += '<li>Đau khi xuất tinh, hoặc xuất tinh ra máu</li>';
+  h += '<li>Xuất tinh sớm mới xuất hiện đột ngột kèm khó cương</li>';
+  h += '<li>Đau vùng chậu hoặc tiểu buốt kéo dài</li>';
+  h += '</ul></div>';
+
+  h += '<div class="cta">';
+  h += '<h3>'+(ten ? ten+', nh' : 'Nh')+'ận lộ trình kéo dài thời gian cho anh</h3>';
+  h += '<p>Đội ngũ Giữ Lửa sẽ đọc kết quả của anh và gửi qua Zalo một lộ trình cụ thể: bài tập, kỹ thuật kiểm soát, theo từng tuần. Miễn phí.</p>';
+  h += '<button class="nut" id="b-zalo">Nhận lộ trình qua Zalo</button></div>';
+
+  h += '<details><summary>Bài đánh giá này dựa trên thang điểm nào?</summary><ul class="nguon-ds">';
+  h += '<li>Thang chẩn đoán xuất tinh sớm PEDT. Symonds T và cộng sự, <i>European Urology</i> 2007 (PMID 17275165).</li>';
+  h += '<li>Tập cơ sàn chậu cho xuất tinh sớm. Pastore AL và cộng sự, <i>Ther Adv Urol</i> 2014 (PMID 24883105).</li>';
+  h += '<li>Thời gian ở nam giới nói chung. Waldinger MD và cộng sự, <i>J Sex Med</i> 2009 (PMID 19627471).</li>';
+  h += '</ul></details>';
+
+  h += '<div class="chan">Điểm số và mức độ được tính từ chính câu trả lời của anh theo thang PEDT, không phải phỏng đoán.<br>Đây là bài sàng lọc, không phải chẩn đoán, không thay thế việc khám bác sĩ.<br><br>© Giữ Lửa</div>';
+  h += '<div class="tiep-boc" style="margin-top:16px"><button class="nut phu" id="b-lam-lai">Làm lại từ đầu</button></div>';
+
+  E('kq-noidung').innerHTML = h;
+
+  var rays = E('kq-noidung').querySelectorAll('.cs-ray');
+  kc.forEach(function(x, i){
+    if (!rays[i]) return;
+    var nn = nhanKhiaCanh(i, diemCua(x.id));
+    var fill = document.createElement('i');
+    fill.style.width = Math.max(nn.p*100, 3) + '%';
+    fill.style.background = nn.mau;
+    rays[i].appendChild(fill);
+  });
+
+  E('b-zalo').addEventListener('click', function(){
+    var loi = 'Chào đội ngũ Giữ Lửa, tôi vừa làm bài đánh giá xuất tinh sớm. Điểm của tôi là ' + d.pedt + '/20 (' + muc.ten + '). Tôi muốn nhận lộ trình cải thiện.';
+    try { if (navigator.clipboard) navigator.clipboard.writeText(loi); } catch(e){}
+    window.open('https://zalo.me/' + SO_ZALO, '_blank');
+  });
+  E('b-lam-lai').addEventListener('click', function(){
+    traLoi = {}; viTri = 0;
+    E('i-ten').value = ''; E('i-sdt').value = ''; E('i-dongy').checked = false;
+    moMan('m-dau');
+  });
+  moMan('m-kq');
+}
+
+/* ===== GỬI SỐ VỀ ===== */
+function guiLead(gt){
+  try {
+    var kho = JSON.parse(localStorage.getItem('giulua_lead_xts') || '[]');
+    kho.push(gt);
+    localStorage.setItem('giulua_lead_xts', JSON.stringify(kho));
+  } catch(e){}
+  if (!DUONG_NOI_LEAD) return;
+  try {
+    fetch(DUONG_NOI_LEAD, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(gt)}).catch(function(){});
+  } catch(e){}
+}
+function chuanSdt(s){
+  var x = (s||'').replace(/[\s.\-()]/g,'');
+  if (x.indexOf('+84') === 0) x = '0' + x.slice(3);
+  else if (x.indexOf('84') === 0 && x.length === 11) x = '0' + x.slice(2);
+  return x;
+}
+function sdtHopLe(s){ return /^0[35789][0-9]{8}$/.test(s); }
+
+/* ===== NỐI SỰ KIỆN ===== */
+E('b-batdau').addEventListener('click', function(){ viTri = 0; veCau(); moMan('m-hoi'); });
+E('b-lui').addEventListener('click', quayLui);
+E('b-lui2').addEventListener('click', function(){ moMan('m-hoi'); viTri = CAU.length - 1; veCau(); });
+E('b-xem').addEventListener('click', function(){
+  var ten = E('i-ten').value.trim();
+  var sdt = chuanSdt(E('i-sdt').value);
+  var ok = true;
+  if (ten.length < 2) { E('e-ten').textContent = 'Anh cho biết tên để tiện xưng hô.'; ok = false; } else E('e-ten').textContent = '';
+  if (!sdtHopLe(sdt)) { E('e-sdt').textContent = 'Số Zalo chưa đúng. Anh nhập 10 số, ví dụ 0912345678.'; ok = false; } else E('e-sdt').textContent = '';
+  if (!E('i-dongy').checked) { E('e-dongy').textContent = 'Anh vui lòng tích vào ô đồng ý để nhận kết quả.'; ok = false; } else E('e-dongy').textContent = '';
+  if (!ok) return;
+  var d = chamDiem();
+  var muc = xepMuc(d.pedt);
+  guiLead({ten:ten, sdt:sdt, diem_pedt:d.pedt, muc_do:muc.ten, tra_loi:traLoi, luc:new Date().toISOString()});
+  veKetQua(ten);
+});
+E('i-ten').addEventListener('keydown', function(e){ if (e.key === 'Enter') E('i-sdt').focus(); });
+E('i-sdt').addEventListener('keydown', function(e){ if (e.key === 'Enter') E('b-xem').click(); });
+</script>
+</body>
+</html>
