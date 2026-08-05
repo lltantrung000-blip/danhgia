@@ -35,6 +35,7 @@ body{
 /* MÀN MỞ ĐẦU */
 #m-dau{justify-content:center;padding-bottom:24px}
 .dau{text-align:center;padding-top:calc(20px + env(safe-area-inset-top))}
+.anh{width:92px;height:92px;border-radius:50%;object-fit:cover;border:2px solid var(--vang-2);display:block;margin:0 auto 16px}
 .hieu{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:var(--vang-2);font-weight:700}
 h1{font-size:28px;line-height:1.28;font-weight:800;margin:12px 0 14px;letter-spacing:-.4px}
 .dan{color:var(--chu-2);font-size:16px;margin-bottom:22px;line-height:1.6}
@@ -115,12 +116,12 @@ h2{font-size:18.5px;font-weight:750;margin:26px 0 12px;letter-spacing:-.2px}
 .the{background:var(--the);border:1px solid var(--vien);border-radius:var(--r);padding:16px 18px;margin-bottom:11px}
 .the h3{font-size:16px;font-weight:750;margin-bottom:6px;line-height:1.38}
 .the p{font-size:14.5px;color:var(--chu-2);line-height:1.6}
-.chi-so{margin-bottom:14px}
+.chi-so{margin-bottom:17px}
 .cs-hang{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px}
 .cs-ten{font-size:14.5px;color:var(--chu);font-weight:600}
 .cs-diem{font-size:13.5px;color:var(--chu-2);font-variant-numeric:tabular-nums;font-weight:650;flex:0 0 auto}
 .cs-ray{height:10px;border-radius:0 4px 4px 0;overflow:hidden;background:rgba(255,255,255,.08)}
-.cs-note{font-size:12.5px;color:var(--chu-mo);margin-top:6px}
+.cs-note{font-size:13px;color:var(--chu-2);margin-top:6px;line-height:1.5}
 .cs-note b{font-weight:700}
 .cs-ray>i{display:block;height:100%;border-radius:0 4px 4px 0;transition:width .5s ease}
 .co-do{border-color:rgba(208,59,59,.42);background:rgba(208,59,59,.08)}
@@ -143,6 +144,7 @@ summary{font-size:13.5px;color:var(--chu-mo);cursor:pointer;padding:8px 0;font-w
 <!-- MÀN MỞ ĐẦU -->
 <section class="man mo" id="m-dau">
   <div class="dau">
+    <img class="anh" src="data:image/jpeg;base64,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" alt="Chị Mai, Giữ Lửa">
     <div class="hieu">Giữ Lửa</div>
     <h1>Đánh giá mức độ rối loạn cương dương</h1>
     <p class="dan">Trả lời <b>20 câu</b> để biết chính xác tình trạng của mình đang ở mức nào, và nên làm gì tiếp theo.</p>
@@ -536,18 +538,42 @@ function taoNhanDinh(muc){
   return ra.slice(0, 3);
 }
 
-/* Nhãn chữ cho từng nhóm, để khách hiểu điểm đó tốt hay yếu.
-   Nhóm 1 (chức năng cương) theo ngưỡng Cappelleri; 4 nhóm còn lại theo tỉ lệ điểm. */
+/* Nhãn + lời giải cho từng nhóm, giúp khách hiểu mức của mình ở nhánh đó.
+   Nhóm chức năng cương theo ngưỡng Cappelleri; 4 nhóm còn lại theo tỉ lệ điểm của thang IIEF. */
 function nhanChiSo(i, diem, max, muc){
   if (i === 0){
-    var m = {khong:'Bình thường', nhe:'Nhẹ', nhe_vua:'Nhẹ đến trung bình', vua:'Trung bình', nang:'Nặng'};
-    return {chu:m[muc.ma], mau:muc.mau};
+    var EFG = {
+      khong:{chu:'Bình thường', mau:'var(--tot)', giai:'Khả năng cương của anh đang tốt. Đây là chỉ số quan trọng nhất, nên duy trì lối sống lành mạnh để giữ.'},
+      nhe:{chu:'Nhẹ', mau:'var(--canh)', giai:'Anh có suy giảm nhẹ khả năng cương. Nắm sớm và điều chỉnh thì cải thiện được nhanh.'},
+      nhe_vua:{chu:'Nhẹ đến trung bình', mau:'var(--nang-vua)', giai:'Khả năng cương đã giảm rõ, ảnh hưởng tới cuộc quan hệ. Nên xử lý bài bản, đừng để lâu.'},
+      vua:{chu:'Trung bình', mau:'var(--nang-vua)', giai:'Khả năng cương giảm nhiều, việc quan hệ khó trọn vẹn. Anh nên được hỗ trợ nghiêm túc.'},
+      nang:{chu:'Nặng', mau:'var(--nang)', giai:'Khả năng cương suy giảm nặng. Anh nên được đánh giá và hỗ trợ sớm.'}
+    };
+    return EFG[muc.ma];
   }
   var p = max ? (diem / max) : 0;
-  if (p >= 0.80) return {chu:'Tốt', mau:'var(--tot)'};
-  if (p >= 0.60) return {chu:'Khá', mau:'var(--canh)'};
-  if (p >= 0.40) return {chu:'Trung bình', mau:'var(--nang-vua)'};
-  return {chu:'Yếu, nên cải thiện', mau:'var(--nang)'};
+  var tier = p >= 0.80 ? 'tot' : p >= 0.60 ? 'kha' : p >= 0.40 ? 'tb' : 'yeu';
+  var CHU = {tot:'Tốt', kha:'Khá', tb:'Trung bình', yeu:'Yếu'};
+  var MAU = {tot:'var(--tot)', kha:'var(--canh)', tb:'var(--nang-vua)', yeu:'var(--nang)'};
+  var GIAI = {
+    1:{ tot:'Anh vẫn thấy thỏa mãn và thú vị khi quan hệ, tần suất ổn. Đây là điểm mạnh cần giữ.',
+        kha:'Việc quan hệ của anh còn khá ổn nhưng chưa trọn vẹn như mong muốn.',
+        tb:'Sự thỏa mãn khi quan hệ đã giảm, cuộc yêu chưa còn nhiều niềm vui.',
+        yeu:'Anh gần như không còn thấy thỏa mãn khi quan hệ. Đây là dấu hiệu cần cải thiện sớm.' },
+    2:{ tot:'Anh vẫn xuất tinh và đạt cực khoái đều. Chức năng này đang ổn.',
+        kha:'Anh vẫn đạt được cực khoái nhưng chưa đều như trước.',
+        tb:'Việc đạt cực khoái đã khó khăn hơn rõ rệt.',
+        yeu:'Anh khó đạt được cực khoái. Nên trao đổi kỹ với chuyên gia.' },
+    3:{ tot:'Ham muốn của anh vẫn mạnh. Đây là nền tảng tốt để cải thiện những phần khác.',
+        kha:'Ham muốn của anh còn khá nhưng đã nhạt hơn trước.',
+        tb:'Ham muốn đã giảm, có thể liên quan tới nội tiết hoặc tâm lý.',
+        yeu:'Ham muốn giảm nhiều. Nên kiểm tra nội tiết, nhất là testosterone.' },
+    4:{ tot:'Nhìn chung anh vẫn hài lòng với đời sống tình dục và bạn đời.',
+        kha:'Anh còn khá hài lòng nhưng chưa thật sự trọn vẹn.',
+        tb:'Mức hài lòng chung đã giảm, ảnh hưởng tới tâm lý và tình cảm.',
+        yeu:'Anh không còn hài lòng với đời sống tình dục. Điều này dễ ảnh hưởng tới mối quan hệ.' }
+  };
+  return {chu:CHU[tier], mau:MAU[tier], giai:GIAI[i][tier]};
 }
 
 /* ===== VẼ KẾT QUẢ ===== */
@@ -588,7 +614,7 @@ function veKetQua(ten){
     var nn = nhanChiSo(i, x.diem, x.max, muc);
     h += '<div class="chi-so"><div class="cs-hang"><span class="cs-ten">'+x.ten+'</span><span class="cs-diem">'+x.diem+'/'+x.max+'</span></div>'
        + '<div class="cs-ray"></div>'
-       + '<div class="cs-note">Của anh: <b style="color:'+nn.mau+'">'+nn.chu+'</b></div></div>';
+       + '<div class="cs-note"><b style="color:'+nn.mau+'">'+nn.chu+'.</b> '+nn.giai+'</div></div>';
   });
   h += '</div>';
 
