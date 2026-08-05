@@ -120,6 +120,8 @@ h2{font-size:18.5px;font-weight:750;margin:26px 0 12px;letter-spacing:-.2px}
 .cs-ten{font-size:14.5px;color:var(--chu);font-weight:600}
 .cs-diem{font-size:13.5px;color:var(--chu-2);font-variant-numeric:tabular-nums;font-weight:650;flex:0 0 auto}
 .cs-ray{height:10px;border-radius:0 4px 4px 0;overflow:hidden;background:rgba(255,255,255,.08)}
+.cs-note{font-size:12.5px;color:var(--chu-mo);margin-top:6px}
+.cs-note b{font-weight:700}
 .cs-ray>i{display:block;height:100%;border-radius:0 4px 4px 0;transition:width .5s ease}
 .co-do{border-color:rgba(208,59,59,.42);background:rgba(208,59,59,.08)}
 .co-do h3{color:#ff9d9d}
@@ -534,6 +536,20 @@ function taoNhanDinh(muc){
   return ra.slice(0, 3);
 }
 
+/* Nhãn chữ cho từng nhóm, để khách hiểu điểm đó tốt hay yếu.
+   Nhóm 1 (chức năng cương) theo ngưỡng Cappelleri; 4 nhóm còn lại theo tỉ lệ điểm. */
+function nhanChiSo(i, diem, max, muc){
+  if (i === 0){
+    var m = {khong:'Bình thường', nhe:'Nhẹ', nhe_vua:'Nhẹ đến trung bình', vua:'Trung bình', nang:'Nặng'};
+    return {chu:m[muc.ma], mau:muc.mau};
+  }
+  var p = max ? (diem / max) : 0;
+  if (p >= 0.80) return {chu:'Tốt', mau:'var(--tot)'};
+  if (p >= 0.60) return {chu:'Khá', mau:'var(--canh)'};
+  if (p >= 0.40) return {chu:'Trung bình', mau:'var(--nang-vua)'};
+  return {chu:'Yếu, nên cải thiện', mau:'var(--nang)'};
+}
+
 /* ===== VẼ KẾT QUẢ ===== */
 function veKetQua(ten){
   var d = chamDiem();
@@ -567,8 +583,12 @@ function veKetQua(ten){
     {ten:'Hài lòng chung', diem:d.OS, max:10}
   ];
   h += '<h2>Chi tiết theo 5 nhóm</h2><div class="the">';
-  bo.forEach(function(x){
-    h += '<div class="chi-so"><div class="cs-hang"><span class="cs-ten">'+x.ten+'</span><span class="cs-diem">'+x.diem+'/'+x.max+'</span></div><div class="cs-ray"></div></div>';
+  h += '<p style="font-size:12.5px;color:var(--chu-mo);margin:-2px 0 14px;line-height:1.5">Ở mỗi nhóm, điểm càng cao nghĩa là càng khỏe.</p>';
+  bo.forEach(function(x, i){
+    var nn = nhanChiSo(i, x.diem, x.max, muc);
+    h += '<div class="chi-so"><div class="cs-hang"><span class="cs-ten">'+x.ten+'</span><span class="cs-diem">'+x.diem+'/'+x.max+'</span></div>'
+       + '<div class="cs-ray"></div>'
+       + '<div class="cs-note">Của anh: <b style="color:'+nn.mau+'">'+nn.chu+'</b></div></div>';
   });
   h += '</div>';
 
