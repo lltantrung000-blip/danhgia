@@ -131,6 +131,10 @@ h2{font-size:18.5px;font-weight:750;margin:26px 0 12px;letter-spacing:-.2px}
 .cta{background:linear-gradient(160deg,rgba(251,191,36,.16),rgba(212,168,67,.05));border:1px solid rgba(251,191,36,.36);border-radius:var(--r);padding:22px 18px;margin:26px 0 12px;text-align:center}
 .cta h3{font-size:20px;font-weight:800;margin-bottom:8px;line-height:1.32}
 .cta p{font-size:15px;color:var(--chu-2);margin-bottom:16px;line-height:1.6}
+.tin-nhan{background:rgba(0,0,0,.34);border:1px solid var(--vien);border-radius:10px;padding:12px 14px;margin-bottom:10px;text-align:left}
+.tn-nhan{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--chu-mo);font-weight:700;margin-bottom:6px}
+.tn-noi{font-size:14px;color:var(--chu);line-height:1.55}
+.tn-mach{font-size:13px;color:var(--chu-mo);margin-bottom:14px;line-height:1.5}
 .chan{font-size:12.5px;color:var(--chu-mo);text-align:center;line-height:1.65;margin-top:22px;padding-top:16px;border-top:1px solid var(--vien)}
 .nguon-ds{font-size:12.5px;color:var(--chu-mo);line-height:1.7}
 .nguon-ds li{margin-bottom:5px;margin-left:16px}
@@ -148,7 +152,7 @@ summary{font-size:13.5px;color:var(--chu-mo);cursor:pointer;padding:8px 0;font-w
     <div class="hieu">Giữ Lửa</div>
     <h1>Đánh giá mức độ rối loạn cương dương</h1>
     <p class="dan">Trả lời <b>20 câu</b> để biết chính xác tình trạng của mình đang ở mức nào, và nên làm gì tiếp theo.</p>
-    <div class="chip"><span>⏱</span><span>Khoảng <b>2 phút</b> · Theo thang điểm quốc tế IIEF</span></div>
+    <div class="chip"><span>⏱</span><span>Khoảng <b>5 phút</b> · Theo thang điểm quốc tế IIEF</span></div>
   </div>
   <div class="tiep-boc">
     <button class="nut" id="b-batdau">Bắt đầu đánh giá</button>
@@ -188,7 +192,7 @@ summary{font-size:13.5px;color:var(--chu-mo);cursor:pointer;padding:8px 0;font-w
   </div>
   <div class="than">
     <h2 class="hoi" style="margin:14px 0 7px">Kết quả của anh đã sẵn sàng</h2>
-    <p class="gohoi">Anh để lại tên và số Zalo để đội ngũ Giữ Lửa gửi kết quả chi tiết và lộ trình cải thiện riêng cho anh.</p>
+    <p class="gohoi">Anh để lại tên và số Zalo để nhận kết quả. Xem xong, bấm nút Zalo ở cuối trang là nhận lộ trình cải thiện riêng, miễn phí.</p>
 
     <label class="nhan" for="i-ten">Tên của anh</label>
     <input class="o-nhap" id="i-ten" type="text" autocomplete="name" placeholder="Ví dụ: Anh Tuấn" enterkeyhint="next">
@@ -227,6 +231,7 @@ summary{font-size:13.5px;color:var(--chu-mo);cursor:pointer;padding:8px 0;font-w
    số được giữ tạm trong trình duyệt của khách. */
 var DUONG_NOI_LEAD = '';
 var SO_ZALO = '0934368434';
+var MA_BAI = 'RLCD';   /* để phân biệt lead đến từ bài nào */
 
 /* ===== THANG ĐÁP ÁN IIEF ===== */
 var TS6 = [
@@ -453,7 +458,7 @@ document.addEventListener('input', function(e){
 
 function sangCauKe(){
   if (viTri < CAU.length - 1) { viTri++; veCau(); window.scrollTo(0,0); }
-  else { moMan('m-lead'); }
+  else { ghiSuKien('toi_man_lead'); moMan('m-lead'); }
 }
 function quayLui(){
   if (dangChuyen) return;
@@ -633,9 +638,13 @@ function veKetQua(ten){
   h += '<li>Mất cương đột ngột kèm tê bì hoặc yếu chân</li>';
   h += '</ul></div>';
 
+  var loiNhan = 'Chào chị Mai, tôi vừa làm bài đánh giá rối loạn cương dương. Điểm của tôi là '
+              + d.EF + '/30 (' + muc.ten + '). Tôi muốn nhận lộ trình cải thiện.';
   h += '<div class="cta">';
   h += '<h3>'+(ten ? ten+', nh' : 'Nh')+'ận lộ trình cải thiện riêng cho anh</h3>';
-  h += '<p>Đội ngũ Giữ Lửa sẽ đọc kết quả của anh và gửi qua Zalo một lộ trình cụ thể: nên làm gì, làm thế nào, theo từng tuần. Miễn phí.</p>';
+  h += '<p>Chị Mai sẽ đọc kết quả của anh và gửi qua Zalo một lộ trình cụ thể: nên làm gì, làm thế nào, theo từng tuần. Miễn phí.</p>';
+  h += '<div class="tin-nhan"><div class="tn-nhan">Tin nhắn gửi cho chị Mai</div><div class="tn-noi" id="tn-noi">'+loiNhan+'</div></div>';
+  h += '<div class="tn-mach" id="tn-mach">Anh bấm nút dưới, tin nhắn được chép sẵn, chỉ cần dán và gửi.</div>';
   h += '<button class="nut" id="b-zalo">Nhận lộ trình qua Zalo</button></div>';
 
   h += '<details><summary>Bài đánh giá này dựa trên thang điểm nào?</summary><ul class="nguon-ds">';
@@ -660,9 +669,8 @@ function veKetQua(ten){
   });
 
   E('b-zalo').addEventListener('click', function(){
-    var loi = 'Chào đội ngũ Giữ Lửa, tôi vừa làm bài đánh giá. Điểm chức năng cương của tôi là ' + d.EF + '/30 (' + muc.ten + '). Tôi muốn nhận lộ trình cải thiện.';
-    try { if (navigator.clipboard) navigator.clipboard.writeText(loi); } catch(e){}
-    window.open('https://zalo.me/' + SO_ZALO, '_blank');
+    ghiSuKien('bam_zalo');
+    chepRoiMoZalo(loiNhan);
   });
   E('b-lam-lai').addEventListener('click', function(){
     traLoi = {}; viTri = 0;
@@ -673,16 +681,45 @@ function veKetQua(ten){
 }
 
 /* ===== GỬI SỐ VỀ ===== */
+function guiVe(goi){
+  if (!DUONG_NOI_LEAD) return;
+  try {
+    fetch(DUONG_NOI_LEAD, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(goi)}).catch(function(){});
+  } catch(e){}
+}
 function guiLead(gt){
+  gt.loai = 'lead';
+  gt.bai  = MA_BAI;
   try {
     var kho = JSON.parse(localStorage.getItem('giulua_lead') || '[]');
     kho.push(gt);
     localStorage.setItem('giulua_lead', JSON.stringify(kho));
   } catch(e){}
-  if (!DUONG_NOI_LEAD) return;
+  guiVe(gt);
+}
+/* Ghi mốc đo phễu. Chạy ngay khi DUONG_NOI_LEAD được dán link. */
+function ghiSuKien(ten){
+  guiVe({loai:'su_kien', su_kien:ten, bai:MA_BAI, luc:new Date().toISOString()});
+}
+/* Chép tin nhắn rồi mở Zalo. Báo rõ cho khách biết đã chép hay chưa. */
+function chepRoiMoZalo(loi){
+  var mach = E('tn-mach');
+  function bao(t){ if (mach) mach.textContent = t; }
+  function moZalo(){ window.open('https://zalo.me/' + SO_ZALO, '_blank'); }
   try {
-    fetch(DUONG_NOI_LEAD, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(gt)}).catch(function(){});
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(loi).then(function(){
+        bao('Đã chép tin nhắn. Anh mở Zalo, dán vào rồi bấm gửi.');
+        moZalo();
+      }, function(){
+        bao('Anh chép tin nhắn ở trên rồi gửi cho chị Mai qua Zalo.');
+        moZalo();
+      });
+      return;
+    }
   } catch(e){}
+  bao('Anh chép tin nhắn ở trên rồi gửi cho chị Mai qua Zalo.');
+  moZalo();
 }
 function chuanSdt(s){
   var x = (s||'').replace(/[\s.\-()]/g,'');
@@ -693,7 +730,7 @@ function chuanSdt(s){
 function sdtHopLe(s){ return /^0[35789][0-9]{8}$/.test(s); }
 
 /* ===== NỐI SỰ KIỆN ===== */
-E('b-batdau').addEventListener('click', function(){ viTri = 0; veCau(); moMan('m-hoi'); });
+E('b-batdau').addEventListener('click', function(){ ghiSuKien('bat_dau'); viTri = 0; veCau(); moMan('m-hoi'); });
 E('b-lui').addEventListener('click', quayLui);
 E('b-lui2').addEventListener('click', function(){ moMan('m-hoi'); viTri = CAU.length - 1; veCau(); });
 E('b-tiep').addEventListener('click', function(){
