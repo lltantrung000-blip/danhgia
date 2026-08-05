@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0a">
 <meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Đánh giá mức độ rối loạn cương dương — Giữ Lửa">
+<meta property="og:description" content="Bài đánh giá theo thang điểm quốc tế IIEF. Trả lời 20 câu để biết tình trạng của mình đang ở mức nào.">
+<meta name="description" content="Bài đánh giá theo thang điểm quốc tế IIEF. Trả lời 20 câu để biết tình trạng của mình đang ở mức nào.">
 <title>Đánh giá mức độ rối loạn cương dương (IIEF)</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -140,6 +144,24 @@ h2{font-size:18.5px;font-weight:750;margin:26px 0 12px;letter-spacing:-.2px}
 .nguon-ds li{margin-bottom:5px;margin-left:16px}
 details{margin-top:12px}
 summary{font-size:13.5px;color:var(--chu-mo);cursor:pointer;padding:8px 0;font-weight:600;-webkit-tap-highlight-color:transparent}
+
+/* --- chi tiet hoan thien --- */
+button:focus-visible, input:focus-visible, summary:focus-visible{outline:2px solid var(--vang);outline-offset:2px}
+::selection{background:rgba(251,191,36,.26);color:#fff}
+summary{list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"\203A";display:inline-block;margin-left:7px;color:var(--vang-2);transform:rotate(90deg);transition:transform .2s ease}
+details[open] summary::after{transform:rotate(-90deg)}
+.q-hien{animation:hien .18s ease}
+.cs-ray>i{transform-origin:left center;animation:thanh-vao .55s cubic-bezier(.2,.7,.3,1) both}
+@keyframes thanh-vao{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.cs-ray>i{animation:none}}
+.luu-y-kq{font-size:13.5px;color:var(--chu-mo);line-height:1.55;margin-top:12px;text-align:center}
+@media print{
+  :root{--nen:#fff;--the:#f7f7f7;--the-2:#eee;--chu:#111;--chu-2:#333;--chu-mo:#555;--vien:#ccc;--vien-manh:#999}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .nut,.lui,.tiep-boc,.tn-mach,.tin-nhan{display:none}
+}
 </style>
 </head>
 <body>
@@ -165,7 +187,7 @@ summary{font-size:13.5px;color:var(--chu-mo);cursor:pointer;padding:8px 0;font-w
   <div class="thanh-dau">
     <div class="hang-dau">
       <button class="lui" id="b-lui" aria-label="Quay lại câu trước">←</button>
-      <span class="dem" id="t-dem">Câu 1/20</span>
+      <span class="dem" id="t-dem" aria-live="polite">Câu 1/20</span>
       <span class="phan" id="t-phan"></span>
     </div>
     <div class="rai"><i id="t-rai"></i></div>
@@ -365,13 +387,16 @@ function moMan(id){
 /* ===== VẼ CÂU HỎI ===== */
 function veCau(){
   var c = CAU[viTri];
+  var than = document.querySelector('#m-hoi .than');
+  if (than) { than.classList.remove('q-hien'); void than.offsetWidth; than.classList.add('q-hien'); }
   E('t-dem').textContent  = 'Câu ' + (viTri+1) + '/' + CAU.length;
-  E('t-phan').textContent = c.phan;
+  E('t-phan').textContent = (c.phan === 'IIEF' || c.phan === 'PEDT') ? 'Bộ câu hỏi quốc tế' : c.phan;
   E('t-rai').style.width  = (viTri / CAU.length * 100) + '%';
   E('t-hoi').innerHTML    = c.hoi;
-  E('t-hoi').style.marginBottom = c.go ? '10px' : '18px';
-  E('t-gohoi').textContent = c.go || '';
-  E('t-gohoi').style.display = c.go ? 'block' : 'none';
+  var goChu = c.go || (c.phan === 'IIEF' ? 'Tính trong 4 tuần gần đây.' : '');
+  E('t-hoi').style.marginBottom = goChu ? '10px' : '18px';
+  E('t-gohoi').textContent = goChu;
+  E('t-gohoi').style.display = goChu ? 'block' : 'none';
 
   var boc = E('t-ds');
   boc.innerHTML = '';
@@ -389,6 +414,7 @@ function veCau(){
       else chon = (o.v !== undefined) ? (daCo.v === o.v) : (daCo.k === k);
     }
     if (chon) b.classList.add('chon');
+    b.setAttribute('aria-pressed', chon ? 'true' : 'false');
     b.addEventListener('click', function(){ bam(c, o, k, b); });
     boc.appendChild(b);
   });
@@ -416,6 +442,7 @@ function capNhatNutTiep(c){
 }
 
 function bam(c, o, k, nut){
+  if (dangChuyen) return;   /* chan bam dup lam nhay coc cau */
   if (c.kieu === 'nhieu') {
     var t = traLoi[c.id] || {vs:[], khac:''};
     var vs = (t.vs || []).slice();
@@ -481,6 +508,16 @@ function chamDiem(){
   });
   return {EF:EF, OF:OF, SD:SD, IS:IS, OS:OS, soKhong:khong};
 }
+/* Thang Cappelleri chỉ có hiệu lực với người CÓ hoạt động tình dục trong 4 tuần qua
+   (dải điểm 6 đến 30). Khách không quan hệ sẽ ra điểm rất thấp một cách giả tạo,
+   nên không được xếp mức, phải báo là chưa đủ dữ liệu. */
+function chuaDuDuLieu(d){
+  var soKhongEF = 0;
+  ['q1','q2','q3','q4','q5'].forEach(function(id){
+    if (traLoi[id] && traLoi[id].d === 0) soKhongEF++;
+  });
+  return soKhongEF >= 3 || d.EF < 6;
+}
 function xepMuc(ef){
   if (ef >= 26) return {ten:'Không có rối loạn cương', mau:'var(--tot)', ma:'khong'};
   if (ef >= 22) return {ten:'Rối loạn cương mức độ nhẹ', mau:'var(--canh)', ma:'nhe'};
@@ -499,7 +536,7 @@ function mauTheoTyLe(p){
 function co(id, ma){ var t = traLoi[id]; if (!t) return false; if (t.vs) return t.vs.indexOf(ma) > -1; return t.v === ma; }
 function nhieuHon(id, n){ var t = traLoi[id]; if (!t || !t.vs) return false; return t.vs.filter(function(x){ return x !== 'khong'; }).length >= n; }
 
-function taoNhanDinh(muc){
+function taoNhanDinh(muc, thieuDL){
   var ra = [];
   var sangTot = co('sang','deu');
   var sangKem = co('sang','hiem') || co('sang','khong');
@@ -507,25 +544,25 @@ function taoNhanDinh(muc){
   /* 1. Hướng nguyên nhân */
   if (sangTot && (co('batdau','dotngot') || co('batdau','hoancanh'))) {
     ra.push({td:'Nghiêng về nguyên nhân tâm lý, nhóm cải thiện tốt nhất',
-      nd:'Anh còn cương tự nhiên buổi sáng và tình trạng đến đột ngột hoặc theo hoàn cảnh. Đây thường là dấu hiệu nguyên nhân do tâm lý, căng thẳng, chứ không phải hỏng hóc thực thể, và phục hồi tốt nếu xử lý đúng.'});
+      nd:'Anh còn cương tự nhiên buổi sáng và tình trạng đến đột ngột hoặc theo hoàn cảnh. Đây thường là dấu hiệu nguyên nhân do tâm lý, căng thẳng, chứ không phải hỏng hóc trong cơ thể, và phục hồi tốt nếu xử lý đúng.'});
   } else if (sangKem && co('batdau','giamdan')) {
-    ra.push({td:'Nghiêng về nguyên nhân thực thể, nên kiểm tra sớm',
-      nd:'Cương buổi sáng thưa dần và tình trạng đi xuống từ từ. Đây thường là dấu hiệu nguyên nhân thực thể (mạch máu, đường huyết, nội tiết), ít khi tự cải thiện nếu không tìm đúng gốc.'});
+    ra.push({td:'Nghiêng về nguyên nhân trong cơ thể, nên kiểm tra sớm',
+      nd:'Cương buổi sáng thưa dần và tình trạng đi xuống từ từ. Đây thường là dấu hiệu nguyên nhân nằm trong cơ thể (mạch máu, đường huyết, nội tiết), ít khi tự cải thiện nếu không tìm đúng gốc.'});
   }
 
   /* 2. Đã dùng thuốc rồi bị lại */
   if (co('dadung','bilai')) {
     ra.push({td:'Anh đang trong vòng lặp dùng thuốc rồi bị lại',
-      nd:'Uống thì được, ngưng thì như cũ, đó là do thuốc cương tức thời chỉ giãn mạch cho một lần, không sửa cái gốc. Muốn thoát vòng lặp phải xử lý phần gốc song song.'});
+      nd:'Uống thì được, ngưng thì như cũ, đó là do thuốc cương tức thời chỉ giãn mạch cho một lần, không sửa cái gốc. Muốn thoát vòng lặp thì phải xử lý cùng lúc ba thứ ở gốc: thành mạch, đường huyết và nội tiết.'});
   } else if (co('dadung','phuthuoc')) {
     ra.push({td:'Anh đang phụ thuộc vào thuốc',
       nd:'Khi gần như phải có thuốc mới dám quan hệ, ngoài thể chất còn có nỗi sợ thất bại. Cần đánh giá lại bài bản thay vì tăng liều.'});
   }
 
   /* 3. Tim mạch: đòn bẩy khuyên đi khám */
-  if (muc.ma !== 'khong' && (co('benh','tim') || co('benh','tieuduong') || co('benh','huyetap') || co('benh','momau') || muc.ma === 'vua' || muc.ma === 'nang')) {
+  if (!thieuDL && muc.ma !== 'khong' && (co('benh','tim') || co('benh','tieuduong') || co('benh','huyetap') || co('benh','momau') || muc.ma === 'vua' || muc.ma === 'nang')) {
     ra.push({td:'Điều ít người biết: đây có thể là tín hiệu sớm của tim mạch',
-      nd:'Mạch máu nuôi dương vật nhỏ hơn mạch nuôi tim, nên khi thành mạch bắt đầu hỏng thì trục trặc chuyện chăn gối thường xuất hiện trước cơn đau ngực trung bình khoảng 3 năm. Anh nên kiểm tra cả tim mạch.',
+      nd:'Mạch máu nuôi dương vật nhỏ hơn mạch nuôi tim, nên khi thành mạch bắt đầu hỏng thì trục trặc chuyện chăn gối thường xuất hiện trước cơn đau ngực trung bình khoảng 3 năm. Việc anh nên làm: đi khám Nam khoa hoặc Tiết niệu, và xin kiểm tra bốn thứ là huyết áp, đường huyết, mỡ máu và testosterone. Nên lấy máu buổi sáng khi chưa ăn gì.',
       nguon:'Montorsi F và cộng sự, European Urology 2003 (PMID 12932937).'});
   }
 
@@ -586,31 +623,44 @@ function nhanChiSo(i, diem, max, muc){
 function veKetQua(ten){
   var d = chamDiem();
   var muc = xepMuc(d.EF);
-  var nd = taoNhanDinh(muc);
+  var thieuDL = chuaDuDuLieu(d);
+  var nd = taoNhanDinh(muc, thieuDL);
   var yn = {
-    khong:'Điểm của anh nằm trong ngưỡng bình thường. Anh nên duy trì lối sống lành mạnh để giữ phong độ.',
-    nhe:'Anh có dấu hiệu rối loạn cương ở mức nhẹ. Đây là giai đoạn dễ cải thiện nhất nếu xử lý đúng và sớm.',
-    nhe_vua:'Anh có rối loạn cương ở mức nhẹ đến trung bình. Tình trạng này đã ảnh hưởng tới đời sống và cần được xử lý bài bản.',
-    vua:'Anh có rối loạn cương ở mức trung bình. Đây là mức cần can thiệp nghiêm túc, không nên để kéo dài.',
-    nang:'Anh có rối loạn cương ở mức nặng. Anh nên được đánh giá và hỗ trợ sớm để tránh ảnh hưởng tâm lý và mối quan hệ.'
+    khong:'Điểm của anh nằm trong ngưỡng bình thường: gần như lần nào cũng cương và giữ được tới lúc xong. Anh nên duy trì lối sống lành mạnh để giữ phong độ.',
+    nhe:'Anh có dấu hiệu rối loạn cương ở mức nhẹ: phần lớn các lần vẫn trọn vẹn, thỉnh thoảng mới hụt hoặc phải cố. Đây là giai đoạn dễ cải thiện nhất nếu xử lý đúng và sớm.',
+    nhe_vua:'Anh có rối loạn cương ở mức nhẹ đến trung bình: khoảng một nửa số lần bị hụt hoặc xìu giữa chừng, cuộc quan hệ hay đứt quãng. Mức này cần được xử lý bài bản.',
+    vua:'Anh có rối loạn cương ở mức trung bình: phần lớn các lần không đủ cứng hoặc không giữ được tới lúc xong. Mức này cần can thiệp nghiêm túc, không nên để kéo dài.',
+    nang:'Anh có rối loạn cương ở mức nặng: gần như không lần nào đưa vào và giữ được tới lúc xong. Anh nên được đánh giá và hỗ trợ sớm.'
   };
   var h = '';
 
   h += '<div class="kq-dau">';
-  h += '<div class="kq-nhan">Điểm chức năng cương của anh</div>';
-  h += '<div class="kq-so" style="color:'+muc.mau+'">'+d.EF+'<span style="font-size:26px;color:var(--chu-mo);font-weight:600">/30</span></div>';
-  h += '<div class="kq-muc" style="color:'+muc.mau+';border-color:'+muc.mau+'"><span class="cham" style="background:'+muc.mau+'"></span>'+muc.ten+'</div>';
-  h += '<div class="kq-ynghia">'+yn[muc.ma]+'</div>';
-  h += '</div>';
+  if (thieuDL) {
+    /* Không xếp mức: thang điểm không có hiệu lực khi khách chưa quan hệ trong 4 tuần qua */
+    h += '<div class="kq-nhan">Kết quả của anh</div>';
+    h += '<div class="kq-so" style="color:var(--chu-2);font-size:40px;letter-spacing:-1px">Chưa đủ dữ liệu</div>';
+    h += '<div class="kq-ynghia" style="max-width:400px">Anh cho biết gần đây hầu như không quan hệ, nên thang điểm quốc tế chưa áp dụng được. Thang này chỉ tính chính xác khi có hoạt động trong 4 tuần gần đây. Điều đó <b>không có nghĩa là anh bị nặng</b>. Anh nhắn cho Mai để được hỏi kỹ hơn và đánh giá đúng tình trạng.</div>';
+    h += '</div>';
+  } else {
+    h += '<div class="kq-nhan">Điểm chức năng cương của anh</div>';
+    h += '<div class="kq-so" style="color:'+muc.mau+'">'+d.EF+'<span style="font-size:26px;color:var(--chu-mo);font-weight:600">/30</span></div>';
+    h += '<div class="kq-muc" style="color:'+muc.mau+';border-color:'+muc.mau+'"><span class="cham" style="background:'+muc.mau+'"></span>'+muc.ten+'</div>';
+    h += '<div class="kq-ynghia">'+yn[muc.ma]+'</div>';
+    var cach = 26 - d.EF;
+    h += '<div style="font-size:13.5px;color:var(--chu-mo);margin-top:10px">'
+       + (cach > 0 ? 'Mức bình thường bắt đầu từ 26 điểm. Anh đang cách ngưỡng đó ' + cach + ' điểm.'
+                   : 'Anh đang ở trên ngưỡng bình thường (26 điểm).') + '</div>';
+    h += '</div>';
 
-  if (d.soKhong >= 3) {
-    h += '<div class="the" style="margin-top:16px"><p><b>Lưu ý:</b> anh chọn "không quan hệ" ở '+d.soKhong+' câu, thang điểm tính bằng 0 nên điểm trên đang thấp hơn khả năng thật. Anh nên nhắn Zalo để được đánh giá kỹ hơn.</p></div>';
+    if (d.soKhong >= 3) {
+      h += '<div class="the" style="margin-top:16px"><p><b>Lưu ý:</b> anh chọn "không quan hệ" ở '+d.soKhong+' câu, thang điểm tính những câu này bằng 0 nên điểm ở trên đang thấp hơn khả năng thật của anh.</p></div>';
+    }
   }
 
   var bo = [
     {ten:'Khả năng cương cứng', diem:d.EF, max:30, mau:muc.mau},
     {ten:'Sự hài lòng khi quan hệ', diem:d.IS, max:15},
-    {ten:'Khả năng đạt cực khoái', diem:d.OF, max:10},
+    {ten:'Khả năng lên đỉnh (cực khoái)', diem:d.OF, max:10},
     {ten:'Ham muốn tình dục', diem:d.SD, max:10},
     {ten:'Hài lòng chung', diem:d.OS, max:10}
   ];
@@ -637,7 +687,11 @@ function veKetQua(ten){
   h += '<li>Đau ngực hoặc khó thở khi gắng sức</li>';
   h += '<li>Cương đau cứng kéo dài trên 4 tiếng không xìu (đây là cấp cứu)</li>';
   h += '<li>Mất cương đột ngột kèm tê bì hoặc yếu chân</li>';
-  h += '</ul></div>';
+  h += '<li>Dương vật cong, đau khi cương, hoặc sờ thấy cục xơ cứng</li>';
+  h += '<li>Mất cương sau chấn thương vùng chậu hoặc tầng sinh môn</li>';
+  h += '</ul>';
+  h += '<p style="font-size:14px;color:#ffc9c9;margin-top:12px;line-height:1.55"><b>Đặc biệt lưu ý:</b> nếu anh đang dùng thuốc nhóm nitrat cho tim (nitroglycerin, isosorbid, thuốc ngậm cắt cơn đau ngực) thì <b>tuyệt đối không tự mua thuốc cương</b>. Dùng chung hai thứ có thể gây tụt huyết áp nguy hiểm tính mạng. Phải hỏi bác sĩ trước.</p>';
+  h += '</div>';
 
   var loiNhan = 'Chào Mai, tôi vừa làm bài đánh giá rối loạn cương dương. Điểm của tôi là '
               + d.EF + '/30 (' + muc.ten + '). Tôi muốn nhận lộ trình cải thiện.';
@@ -656,7 +710,7 @@ function veKetQua(ten){
   h += '<li>Ngưỡng phân loại mức độ. Cappelleri JC và cộng sự, <i>Urology</i> 1999 (PMID 10443736).</li>';
   h += '</ul></details>';
 
-  h += '<div class="chan">Điểm số và mức độ được tính từ chính câu trả lời của anh theo thang IIEF, không phải phỏng đoán.<br>Đây là bài sàng lọc, không phải chẩn đoán, không thay thế việc khám bác sĩ.<br><br>© Giữ Lửa</div>';
+  h += '<div class="chan">Mức độ chức năng cương chấm theo ngưỡng đã công bố y khoa (Cappelleri 1999). Nhãn ở 4 nhóm còn lại là cách chia theo tỉ lệ điểm cho dễ đọc, không phải ngưỡng công bố.<br>Đây là bài sàng lọc, không phải chẩn đoán, không thay thế việc khám bác sĩ.<br><br>Cập nhật nội dung: 08/2026 · © Giữ Lửa</div>';
   h += '<div class="tiep-boc" style="margin-top:16px"><button class="nut phu" id="b-lam-lai">Làm lại từ đầu</button></div>';
 
   E('kq-noidung').innerHTML = h;
@@ -673,6 +727,12 @@ function veKetQua(ten){
   });
 
   E('b-zalo').addEventListener('click', function(){
+    var nutZ = this;
+    if (nutZ.disabled) return;
+    nutZ.disabled = true;
+    var chuCu = nutZ.textContent;
+    nutZ.textContent = 'Đang mở Zalo...';
+    setTimeout(function(){ nutZ.disabled = false; nutZ.textContent = chuCu; }, 2500);
     ghiSuKien('bam_zalo');
     if (DUONG_NOI_LEAD) {
       /* tin nhắn tự động gửi về cho Mai kèm tên + số khách đã điền */
@@ -683,7 +743,7 @@ function veKetQua(ten){
     }
   });
   E('b-lam-lai').addEventListener('click', function(){
-    traLoi = {}; viTri = 0;
+    traLoi = {}; viTri = 0; tenKhach = ''; sdtKhach = ''; daBaoMoc = {};
     E('i-ten').value = ''; E('i-sdt').value = ''; E('i-dongy').checked = false;
     moMan('m-dau');
   });
@@ -708,7 +768,10 @@ function guiLead(gt){
   guiVe(gt);
 }
 /* Ghi mốc đo phễu. Chạy ngay khi DUONG_NOI_LEAD được dán link. */
+var daBaoMoc = {};
 function ghiSuKien(ten){
+  if (daBaoMoc[ten]) return;
+  daBaoMoc[ten] = 1;
   guiVe({loai:'su_kien', su_kien:ten, bai:MA_BAI, luc:new Date().toISOString()});
 }
 /* Chép tin nhắn rồi mở Zalo. Báo rõ cho khách biết đã chép hay chưa. */
@@ -756,7 +819,7 @@ E('b-tiep').addEventListener('click', function(){
   sangCauKe();
 });
 E('b-xem').addEventListener('click', function(){
-  var ten = E('i-ten').value.trim();
+  var ten = E('i-ten').value.trim().replace(/[<>&"]/g, '');
   var sdt = chuanSdt(E('i-sdt').value);
   var ok = true;
   if (ten.length < 2) { E('e-ten').textContent = 'Anh cho biết tên để tiện xưng hô.'; ok = false; } else E('e-ten').textContent = '';
@@ -772,5 +835,6 @@ E('b-xem').addEventListener('click', function(){
 E('i-ten').addEventListener('keydown', function(e){ if (e.key === 'Enter') E('i-sdt').focus(); });
 E('i-sdt').addEventListener('keydown', function(e){ if (e.key === 'Enter') E('b-xem').click(); });
 </script>
+<noscript><div style="max-width:520px;margin:0 auto;padding:24px 18px;text-align:center;color:#b4b4b8;font-size:15px;line-height:1.6">Trình duyệt của anh đang tắt JavaScript nên bài đánh giá không chạy được.<br>Anh nhắn Zalo <a href="https://zalo.me/0934368434" style="color:#FBBF24;font-weight:700">0934 368 434</a> để Mai gửi bài đánh giá và lộ trình cho anh.</div></noscript>
 </body>
 </html>

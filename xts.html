@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0a">
 <meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Đánh giá mức độ xuất tinh sớm — Giữ Lửa">
+<meta property="og:description" content="Bài đánh giá theo thang điểm quốc tế PEDT. Trả lời 9 câu để biết tình trạng của mình đang ở mức nào.">
+<meta name="description" content="Bài đánh giá theo thang điểm quốc tế PEDT. Trả lời 9 câu để biết tình trạng của mình đang ở mức nào.">
 <title>Đánh giá mức độ xuất tinh sớm (PEDT)</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -133,6 +137,24 @@ h2{font-size:18.5px;font-weight:750;margin:26px 0 12px;letter-spacing:-.2px}
 .nguon-ds li{margin-bottom:5px;margin-left:16px}
 details{margin-top:12px}
 summary{font-size:13.5px;color:var(--chu-mo);cursor:pointer;padding:8px 0;font-weight:600;-webkit-tap-highlight-color:transparent}
+
+/* --- chi tiet hoan thien --- */
+button:focus-visible, input:focus-visible, summary:focus-visible{outline:2px solid var(--vang);outline-offset:2px}
+::selection{background:rgba(251,191,36,.26);color:#fff}
+summary{list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"\203A";display:inline-block;margin-left:7px;color:var(--vang-2);transform:rotate(90deg);transition:transform .2s ease}
+details[open] summary::after{transform:rotate(-90deg)}
+.q-hien{animation:hien .18s ease}
+.cs-ray>i{transform-origin:left center;animation:thanh-vao .55s cubic-bezier(.2,.7,.3,1) both}
+@keyframes thanh-vao{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.cs-ray>i{animation:none}}
+.luu-y-kq{font-size:13.5px;color:var(--chu-mo);line-height:1.55;margin-top:12px;text-align:center}
+@media print{
+  :root{--nen:#fff;--the:#f7f7f7;--the-2:#eee;--chu:#111;--chu-2:#333;--chu-mo:#555;--vien:#ccc;--vien-manh:#999}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .nut,.lui,.tiep-boc,.tn-mach,.tin-nhan{display:none}
+}
 </style>
 </head>
 <body>
@@ -158,7 +180,7 @@ summary{font-size:13.5px;color:var(--chu-mo);cursor:pointer;padding:8px 0;font-w
   <div class="thanh-dau">
     <div class="hang-dau">
       <button class="lui" id="b-lui" aria-label="Quay lại câu trước">←</button>
-      <span class="dem" id="t-dem">Câu 1/9</span>
+      <span class="dem" id="t-dem" aria-live="polite">Câu 1/9</span>
       <span class="phan" id="t-phan"></span>
     </div>
     <div class="rai"><i id="t-rai"></i></div>
@@ -289,8 +311,10 @@ function moMan(id){
 
 function veCau(){
   var c = CAU[viTri];
+  var than = document.querySelector('#m-hoi .than');
+  if (than) { than.classList.remove('q-hien'); void than.offsetWidth; than.classList.add('q-hien'); }
   E('t-dem').textContent  = 'Câu ' + (viTri+1) + '/' + CAU.length;
-  E('t-phan').textContent = c.phan;
+  E('t-phan').textContent = (c.phan === 'IIEF' || c.phan === 'PEDT') ? 'Bộ câu hỏi quốc tế' : c.phan;
   E('t-rai').style.width  = (viTri / CAU.length * 100) + '%';
   E('t-hoi').innerHTML    = c.hoi;
   E('t-hoi').style.marginBottom = c.go ? '10px' : '18px';
@@ -307,12 +331,14 @@ function veCau(){
     b.innerHTML = '<span class="o"></span><span>' + o.t + '</span>';
     var chon = daCo && ((o.v !== undefined) ? (daCo.v === o.v) : (daCo.k === k));
     if (chon) b.classList.add('chon');
+    b.setAttribute('aria-pressed', chon ? 'true' : 'false');
     b.addEventListener('click', function(){ bam(c, o, k, b); });
     boc.appendChild(b);
   });
 }
 
 function bam(c, o, k, nut){
+  if (dangChuyen) return;   /* chan bam dup lam nhay coc cau */
   traLoi[c.id] = (o.v !== undefined) ? {v:o.v, d:o.d} : {k:k, d:o.d};
   var ds = E('t-ds').querySelectorAll('.da');
   for (var i=0;i<ds.length;i++) ds[i].classList.remove('chon');
@@ -336,11 +362,13 @@ function diemCua(id){ var t = traLoi[id]; return (t && typeof t.d === 'number') 
 function chamDiem(){
   return { pedt: diemCua('q1')+diemCua('q2')+diemCua('q3')+diemCua('q4')+diemCua('q5') };
 }
-/* Ngưỡng PEDT (Symonds 2007): dưới hoặc bằng 8 không xuất tinh sớm; 9 đến 10 ranh giới; từ 11 trở lên nhiều khả năng có. */
+/* Ngưỡng PEDT theo đúng nghiên cứu gốc (Symonds 2007, PMID 17275165):
+   từ 8 điểm trở xuống là không xuất tinh sớm; 9 đến 10 là nhiều khả năng có;
+   từ 11 điểm trở lên là có dấu hiệu xuất tinh sớm rõ. */
 function xepMuc(pedt){
   if (pedt <= 8)  return {ten:'Không có dấu hiệu xuất tinh sớm', mau:'var(--tot)', ma:'khong'};
-  if (pedt <= 10) return {ten:'Ranh giới, cần chú ý', mau:'var(--canh)', ma:'ranh'};
-  return {ten:'Nhiều khả năng bị xuất tinh sớm', mau:'var(--nang)', ma:'co'};
+  if (pedt <= 10) return {ten:'Nhiều khả năng bị xuất tinh sớm', mau:'var(--canh)', ma:'ranh'};
+  return {ten:'Dấu hiệu xuất tinh sớm rõ', mau:'var(--nang)', ma:'co'};
 }
 
 /* Nhãn + lời giải cho từng khía cạnh của PEDT (điểm càng cao càng rõ dấu hiệu). */
@@ -355,7 +383,7 @@ function nhanKhiaCanh(i, s){
     3:{on:'Việc này chưa gây khó chịu nhiều cho anh.', cy:'Anh đã thấy bực bội vì chuyện này.', ro:'Việc này khiến anh rất khó chịu, ảnh hưởng tâm lý.'},
     4:{on:'Anh chưa lo nhiều về phía bạn đời.', cy:'Anh có lo bạn đời chưa thỏa mãn.', ro:'Anh lo nhiều rằng bạn đời không thỏa mãn, dễ ảnh hưởng tình cảm.'}
   };
-  return {chu:CHU[tier], mau:MAU[tier], giai:GIAI[i][tier], p:s/4};
+  return {chu:CHU[tier], mau:MAU[tier], giai:GIAI[i][tier], p:(4-s)/4};
 }
 
 /* ===== NHẬN ĐỊNH RIÊNG (chỉ từ câu trả lời, có nguồn) ===== */
@@ -390,7 +418,7 @@ function taoNhanDinh(muc){
 
   if (co('iel','d1p') && muc.ma !== 'khong') {
     ra.push({td:'Thời gian của anh đang rất ngắn',
-      nd:'Dưới 1 phút là mốc y văn dùng để xác định xuất tinh sớm rõ. Để so sánh, ở nam giới nói chung thời gian trung bình khoảng 5 đến 6 phút. Khoảng cách này thu hẹp được bằng tập luyện đúng cách.',
+      nd:'Dưới 1 phút là mốc các nghiên cứu y khoa dùng để xác định xuất tinh sớm rõ. Để so sánh, ở nam giới nói chung thời gian trung bình khoảng 5 đến 6 phút. Khoảng cách này thu hẹp được bằng tập luyện đúng cách.',
       nguon:'Waldinger MD và cộng sự, The Journal of Sexual Medicine 2009 (PMID 19627471).'});
   }
 
@@ -404,8 +432,8 @@ function veKetQua(ten){
   var nd = taoNhanDinh(muc);
   var yn = {
     khong:'Điểm của anh nằm trong ngưỡng bình thường, chưa thấy dấu hiệu rõ của xuất tinh sớm.',
-    ranh:'Anh đang ở ranh giới. Đã có một số dấu hiệu của xuất tinh sớm, nên chú ý và cải thiện sớm.',
-    co:'Anh có nhiều dấu hiệu của xuất tinh sớm. Tin tốt là đây là tình trạng cải thiện được nếu tập đúng cách.'
+    ranh:'Điểm của anh nằm trong vùng nhiều khả năng có xuất tinh sớm. Nên xử lý sớm, lúc này còn dễ.',
+    co:'Điểm của anh cho thấy dấu hiệu xuất tinh sớm đã rõ. Tin tốt là đây là tình trạng cải thiện được nếu tập đúng cách.'
   };
   var h = '';
 
@@ -418,13 +446,14 @@ function veKetQua(ten){
 
   var kc = [
     {ten:'Khả năng kìm lại', id:'q1'},
-    {ten:'Tần suất bị sớm', id:'q2'},
-    {ten:'Xuất tinh khi mới kích thích nhẹ', id:'q3'},
-    {ten:'Mức khó chịu, bực bội', id:'q4'},
-    {ten:'Lo ảnh hưởng tới bạn đời', id:'q5'}
+    {ten:'Giữ được đúng lúc mình muốn', id:'q2'},
+    {ten:'Chịu được kích thích', id:'q3'},
+    {ten:'Tâm lý thoải mái', id:'q4'},
+    {ten:'Yên tâm về bạn đời', id:'q5'}
   ];
-  h += '<h2>Chi tiết theo 5 khía cạnh</h2><div class="the">';
-  h += '<p style="font-size:12.5px;color:var(--chu-mo);margin:-2px 0 14px;line-height:1.5">Ở mỗi khía cạnh, mức càng cao thì dấu hiệu xuất tinh sớm càng rõ.</p>';
+  h += '<h2>Nhìn kỹ hơn từng phần</h2><div class="the">';
+  h += '<p style="font-size:12.5px;color:var(--chu-mo);margin:-2px 0 12px;line-height:1.5">Thang PEDT chấm bằng tổng 5 câu. Phần tách theo khía cạnh dưới đây chỉ để anh dễ hình dung, không phải điểm chuẩn của từng mục.</p>';
+  h += '<p style="font-size:12.5px;color:var(--chu-mo);margin:-2px 0 14px;line-height:1.5">Ở mỗi khía cạnh, thanh càng dài nghĩa là anh càng đang kiểm soát tốt.</p>';
   kc.forEach(function(x, i){
     var s = diemCua(x.id);
     var nn = nhanKhiaCanh(i, s);
@@ -448,6 +477,8 @@ function veKetQua(ten){
   h += '<li>Đau khi xuất tinh, hoặc xuất tinh ra máu</li>';
   h += '<li>Xuất tinh sớm mới xuất hiện đột ngột kèm khó cương</li>';
   h += '<li>Đau vùng chậu hoặc tiểu buốt kéo dài</li>';
+  h += '<li>Tê bì vùng bẹn, yếu chân hoặc rối loạn tiểu tiện</li>';
+  h += '<li>Mới bị gần đây kèm sụt cân, hồi hộp, run tay hoặc sợ nóng</li>';
   h += '</ul></div>';
 
   var loiNhan = 'Chào Mai, tôi vừa làm bài đánh giá xuất tinh sớm. Điểm của tôi là '
@@ -468,7 +499,7 @@ function veKetQua(ten){
   h += '<li>Thời gian ở nam giới nói chung. Waldinger MD và cộng sự, <i>J Sex Med</i> 2009 (PMID 19627471).</li>';
   h += '</ul></details>';
 
-  h += '<div class="chan">Điểm số và mức độ được tính từ chính câu trả lời của anh theo thang PEDT, không phải phỏng đoán.<br>Đây là bài sàng lọc, không phải chẩn đoán, không thay thế việc khám bác sĩ.<br><br>© Giữ Lửa</div>';
+  h += '<div class="chan">Mức độ chấm theo tổng điểm và ngưỡng đã công bố y khoa (Symonds 2007). Phần tách theo khía cạnh chỉ để dễ đọc, không phải ngưỡng công bố.<br>Đây là bài sàng lọc, không phải chẩn đoán, không thay thế việc khám bác sĩ.<br><br>Cập nhật nội dung: 08/2026 · © Giữ Lửa</div>';
   h += '<div class="tiep-boc" style="margin-top:16px"><button class="nut phu" id="b-lam-lai">Làm lại từ đầu</button></div>';
 
   E('kq-noidung').innerHTML = h;
@@ -484,6 +515,12 @@ function veKetQua(ten){
   });
 
   E('b-zalo').addEventListener('click', function(){
+    var nutZ = this;
+    if (nutZ.disabled) return;
+    nutZ.disabled = true;
+    var chuCu = nutZ.textContent;
+    nutZ.textContent = 'Đang mở Zalo...';
+    setTimeout(function(){ nutZ.disabled = false; nutZ.textContent = chuCu; }, 2500);
     ghiSuKien('bam_zalo');
     if (DUONG_NOI_LEAD) {
       /* tin nhắn tự động gửi về cho Mai kèm tên + số khách đã điền */
@@ -494,7 +531,7 @@ function veKetQua(ten){
     }
   });
   E('b-lam-lai').addEventListener('click', function(){
-    traLoi = {}; viTri = 0;
+    traLoi = {}; viTri = 0; tenKhach = ''; sdtKhach = ''; daBaoMoc = {};
     E('i-ten').value = ''; E('i-sdt').value = ''; E('i-dongy').checked = false;
     moMan('m-dau');
   });
@@ -519,7 +556,10 @@ function guiLead(gt){
   guiVe(gt);
 }
 /* Ghi mốc đo phễu. Chạy ngay khi DUONG_NOI_LEAD được dán link. */
+var daBaoMoc = {};
 function ghiSuKien(ten){
+  if (daBaoMoc[ten]) return;
+  daBaoMoc[ten] = 1;
   guiVe({loai:'su_kien', su_kien:ten, bai:MA_BAI, luc:new Date().toISOString()});
 }
 /* Chép tin nhắn rồi mở Zalo. Báo rõ cho khách biết đã chép hay chưa. */
@@ -556,7 +596,7 @@ E('b-batdau').addEventListener('click', function(){ ghiSuKien('bat_dau'); viTri 
 E('b-lui').addEventListener('click', quayLui);
 E('b-lui2').addEventListener('click', function(){ moMan('m-hoi'); viTri = CAU.length - 1; veCau(); });
 E('b-xem').addEventListener('click', function(){
-  var ten = E('i-ten').value.trim();
+  var ten = E('i-ten').value.trim().replace(/[<>&"]/g, '');
   var sdt = chuanSdt(E('i-sdt').value);
   var ok = true;
   if (ten.length < 2) { E('e-ten').textContent = 'Anh cho biết tên để tiện xưng hô.'; ok = false; } else E('e-ten').textContent = '';
@@ -572,5 +612,6 @@ E('b-xem').addEventListener('click', function(){
 E('i-ten').addEventListener('keydown', function(e){ if (e.key === 'Enter') E('i-sdt').focus(); });
 E('i-sdt').addEventListener('keydown', function(e){ if (e.key === 'Enter') E('b-xem').click(); });
 </script>
+<noscript><div style="max-width:520px;margin:0 auto;padding:24px 18px;text-align:center;color:#b4b4b8;font-size:15px;line-height:1.6">Trình duyệt của anh đang tắt JavaScript nên bài đánh giá không chạy được.<br>Anh nhắn Zalo <a href="https://zalo.me/0934368434" style="color:#FBBF24;font-weight:700">0934 368 434</a> để Mai gửi bài đánh giá và lộ trình cho anh.</div></noscript>
 </body>
 </html>
