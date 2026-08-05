@@ -33,7 +33,8 @@ body{
 @media (prefers-reduced-motion:reduce){.man{animation:none}}
 
 /* MÀN MỞ ĐẦU */
-.dau{text-align:center; padding-top:calc(48px + env(safe-area-inset-top))}
+#m-dau{justify-content:center;padding-bottom:24px}
+.dau{text-align:center;padding-top:calc(20px + env(safe-area-inset-top))}
 .hieu{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:var(--vang-2);font-weight:700}
 h1{font-size:28px;line-height:1.28;font-weight:800;margin:12px 0 14px;letter-spacing:-.4px}
 .dan{color:var(--chu-2);font-size:16px;margin-bottom:22px;line-height:1.6}
@@ -70,7 +71,7 @@ h1{font-size:28px;line-height:1.28;font-weight:800;margin:12px 0 14px;letter-spa
 .than{flex:1;padding-top:6px}
 .hoi{font-size:21px;line-height:1.4;font-weight:700;margin-bottom:7px;letter-spacing:-.2px}
 .hoi b{color:var(--vang)}
-.gohoi{font-size:14.5px;color:var(--chu-mo);margin-bottom:18px;line-height:1.5}
+.gohoi{font-size:14.5px;color:var(--chu-mo);margin-bottom:16px;line-height:1.5}
 .ds{display:flex;flex-direction:column;gap:10px;padding-bottom:8px}
 .da{
   display:flex;align-items:center;gap:13px;width:100%;min-height:58px;
@@ -110,7 +111,7 @@ h1{font-size:28px;line-height:1.28;font-weight:800;margin:12px 0 14px;letter-spa
 .kq-muc{display:inline-flex;align-items:center;gap:9px;margin-top:16px;padding:11px 20px;border-radius:999px;font-weight:800;font-size:18px;border:1.5px solid}
 .kq-muc .cham{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
 .kq-ynghia{font-size:15px;color:var(--chu-2);max-width:380px;margin:16px auto 0;line-height:1.6}
-h2{font-size:19px;font-weight:750;margin:28px 0 12px;letter-spacing:-.2px}
+h2{font-size:18.5px;font-weight:750;margin:26px 0 12px;letter-spacing:-.2px}
 .the{background:var(--the);border:1px solid var(--vien);border-radius:var(--r);padding:16px 18px;margin-bottom:11px}
 .the h3{font-size:16px;font-weight:750;margin-bottom:6px;line-height:1.38}
 .the p{font-size:14.5px;color:var(--chu-2);line-height:1.6}
@@ -162,7 +163,7 @@ summary{font-size:13.5px;color:var(--chu-mo);cursor:pointer;padding:8px 0;font-w
     <div class="rai"><i id="t-rai"></i></div>
   </div>
   <div class="than">
-    <h2 class="hoi" id="t-hoi" style="margin:0 0 7px"></h2>
+    <h2 class="hoi" id="t-hoi"></h2>
     <p class="gohoi" id="t-gohoi"></p>
     <div class="ds" id="t-ds"></div>
     <div id="t-khac-boc" style="display:none"><input class="o-khac" id="t-khac" type="text" placeholder="Khác (nếu có, ghi rõ)"></div>
@@ -276,35 +277,34 @@ function da(bo){ return bo.map(function(x){ return {t:x[0], d:x[1]}; }); }
 var CAU = [
   {id:'q1', phan:'IIEF', mien:'EF', kieu:'don',
    hoi:'Bao nhiêu lần anh <b>cương lên được</b> khi có ham muốn hoặc kích thích?',
-   go:'Tính trong 4 tuần gần đây.', ds:da(TS6)},
+   ds:da(TS6)},
   {id:'q2', phan:'IIEF', mien:'EF', kieu:'don',
    hoi:'Khi cương lên, bao nhiêu lần dương vật <b>cứng đủ độ</b> để quan hệ?',
-   go:'Câu này hỏi về ĐỘ CỨNG của dương vật.', ds:da(TS6)},
+   ds:da(TS6)},
   {id:'q3', phan:'IIEF', mien:'EF', kieu:'don',
    hoi:'Khi bắt đầu quan hệ, bao nhiêu lần anh <b>đưa vào được</b>?',
-   go:'Câu này hỏi THỰC TẾ có đưa vào được không, không hỏi độ cứng như câu trên.', ds:da(TS6b)},
+   ds:da(TS6b)},
   {id:'q4', phan:'IIEF', mien:'EF', kieu:'don',
    hoi:'Sau khi đã đưa vào, bao nhiêu lần anh <b>giữ được, không bị xìu</b> tới lúc xong?',
-   go:'Câu này hỏi việc DUY TRÌ sau khi đã vào.', ds:da(TS6b)},
+   ds:da(TS6b)},
   {id:'q5', phan:'IIEF', mien:'EF', kieu:'don',
    hoi:'Anh thấy <b>khó tới mức nào</b> để giữ cương cho tới lúc quan hệ xong?',
-   go:'Tính trong 4 tuần gần đây.',
    ds:da([['Không quan hệ lần nào',0],['Cực kỳ khó',1],['Rất khó',2],['Khó',3],['Hơi khó',4],['Không khó',5]])},
   {id:'q6', phan:'IIEF', mien:'IS', kieu:'don',
    hoi:'Trong 4 tuần qua, anh <b>quan hệ mấy lần</b>?',
    ds:da([['Không lần nào',0],['1 đến 2 lần',1],['3 đến 4 lần',2],['5 đến 6 lần',3],['7 đến 10 lần',4],['Từ 11 lần trở lên',5]])},
   {id:'q7', phan:'IIEF', mien:'IS', kieu:'don',
    hoi:'Khi quan hệ, bao nhiêu lần anh <b>thấy thỏa mãn</b>?',
-   go:'Tính trong 4 tuần gần đây.', ds:da(TS6b)},
+   ds:da(TS6b)},
   {id:'q8', phan:'IIEF', mien:'IS', kieu:'don',
    hoi:'Anh thấy việc quan hệ <b>thú vị đến mức nào</b>?',
    ds:da([['Không quan hệ lần nào',0],['Không thú vị chút nào',1],['Không thú vị lắm',2],['Khá thú vị',3],['Thú vị',4],['Rất thú vị',5]])},
   {id:'q9', phan:'IIEF', mien:'OF', kieu:'don',
    hoi:'Khi có kích thích hoặc quan hệ, bao nhiêu lần anh <b>xuất tinh được</b>?',
-   go:'Tính trong 4 tuần gần đây.', ds:da(TS6c)},
+   ds:da(TS6c)},
   {id:'q10', phan:'IIEF', mien:'OF', kieu:'don',
    hoi:'Khi có kích thích hoặc quan hệ, bao nhiêu lần anh <b>lên đỉnh (cực khoái)</b>?',
-   go:'Cực khoái là cảm giác lên đỉnh, có thể có hoặc không kèm xuất tinh.', ds:da(TS6c)},
+   ds:da(TS6c)},
   {id:'q11', phan:'IIEF', mien:'SD', kieu:'don',
    hoi:'Trong 4 tuần qua, bao nhiêu lần anh <b>thấy có ham muốn</b>?',
    ds:da(TS5)},
@@ -323,7 +323,6 @@ var CAU = [
 
   {id:'sang', phan:'Yếu tố liên quan', kieu:'don',
    hoi:'Buổi sáng ngủ dậy, anh còn cương tự nhiên không?',
-   go:'Đây là dấu hiệu quan trọng để biết nguyên nhân do tâm lý hay thực thể.',
    ds:[{t:'Vẫn còn đều, gần như mỗi sáng',v:'deu'},{t:'Thỉnh thoảng mới có',v:'thinh'},{t:'Rất hiếm khi',v:'hiem'},{t:'Không còn nữa',v:'khong'}]},
   {id:'batdau', phan:'Yếu tố liên quan', kieu:'don',
    hoi:'Tình trạng này bắt đầu như thế nào?',
@@ -360,6 +359,7 @@ function veCau(){
   E('t-phan').textContent = c.phan;
   E('t-rai').style.width  = (viTri / CAU.length * 100) + '%';
   E('t-hoi').innerHTML    = c.hoi;
+  E('t-hoi').style.marginBottom = c.go ? '10px' : '18px';
   E('t-gohoi').textContent = c.go || '';
   E('t-gohoi').style.display = c.go ? 'block' : 'none';
 
